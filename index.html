@@ -3,817 +3,391 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="鼎盛集团 - 高端房地产开发与投资引领者，鼎立天下，盛世筑家。">
-<title>鼎盛集团 | Dingsheng Group</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<title>用量信息 - DeepSeek 开放平台</title>
 <style>
-/* ===== Reset & Base ===== */
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:80px}
-body{font-family:'PingFang SC','Microsoft YaHei','Helvetica Neue',sans-serif;color:#2C2C2C;background:#F8F6F0;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ===== Color Vars ===== */
-:root{
-  --gold:#C8A45C;
-  --gold-deep:#B8922E;
-  --gold-light:#E0CD8C;
-  --navy:#1B2A4A;
-  --navy-light:#263A5E;
-  --cream:#F8F6F0;
-  --cream-dark:#EDE9DE;
-  --text:#2C2C2C;
-  --text-light:#6B6B6B;
-  --white:#FFFFFF;
-  --border:#E0DCD2;
-  --shadow:0 4px 24px rgba(0,0,0,.08);
-  --shadow-lg:0 12px 48px rgba(0,0,0,.12);
-  --radius:8px;
-  --radius-lg:16px;
-  --transition:.3s cubic-bezier(.4,0,.2,1);
-}
+  :root {
+    --sidebar-w: 240px;
+    --bg: #09090b;
+    --bg-card: #18181b;
+    --bg-sidebar: #0a0a0c;
+    --bg-hover: #27272a;
+    --accent: #3b82f6;
+    --accent-dim: rgba(59,130,246,.15);
+    --text: #f4f4f5;
+    --text-muted: #a1a1aa;
+    --text-dim: #71717a;
+    --border: #27272a;
+    --font-mono: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', 'Consolas', monospace;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  }
 
-/* ===== Typography ===== */
-h2{font-size:2.2rem;font-weight:700;letter-spacing:.04em}
-h3{font-size:1.35rem;font-weight:600}
-.section-tag{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;color:var(--gold-deep);font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
-.section-tag::before{content:'';display:block;width:28px;height:2px;background:var(--gold)}
-.section-header{margin-bottom:48px}
-.section-header h2{margin-bottom:12px;color:var(--navy)}
-.section-header p{color:var(--text-light);max-width:600px;font-size:1.05rem}
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font-sans); font-size: 14px; line-height: 1.5; }
 
-/* ===== Container ===== */
-.container{max-width:1200px;margin:0 auto;padding:0 24px}
+  /* ── Layout ── */
+  .app { display: flex; height: 100vh; overflow: hidden; }
+  .sidebar { width: var(--sidebar-w); min-width: var(--sidebar-w); background: var(--bg-sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; z-index: 20; transition: transform .25s ease; }
+  .main { flex: 1; overflow-y: auto; padding: 0 32px 48px; }
 
-/* ===== Navbar ===== */
-.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:var(--transition)}
-.navbar.scrolled{box-shadow:var(--shadow)}
-.nav-inner{display:flex;align-items:center;justify-content:space-between;height:80px;max-width:1200px;margin:0 auto;padding:0 24px}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--navy);font-weight:700;font-size:1.35rem;letter-spacing:.04em}
-.logo-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--gold),var(--gold-deep));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;font-weight:800}
-.nav-links{display:flex;align-items:center;gap:36px;list-style:none}
-.nav-links a{text-decoration:none;color:var(--text);font-size:.92rem;font-weight:500;position:relative;transition:var(--transition);padding:4px 0}
-.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--gold);transition:var(--transition)}
-.nav-links a:hover,.nav-links a.active{color:var(--gold-deep)}
-.nav-links a:hover::after,.nav-links a.active::after{width:100%}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
-.hamburger span{display:block;width:26px;height:2px;background:var(--navy);transition:var(--transition);border-radius:2px}
-.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
-.hamburger.active span:nth-child(2){opacity:0}
-.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+  /* ── Sidebar ── */
+  .sb-brand { padding: 20px 24px; font-size: 18px; font-weight: 700; letter-spacing: -.3px; }
+  .sb-divider { height: 1px; background: var(--border); margin: 0 16px; }
+  .sb-nav { flex: 1; padding: 12px 8px; display: flex; flex-direction: column; gap: 2px; }
+  .sb-item { display: flex; align-items: center; gap: 10px; padding: 9px 16px; border-radius: 8px; color: var(--text-muted); cursor: pointer; transition: background .15s, color .15s; font-size: 14px; user-select: none; white-space: nowrap; }
+  .sb-item:hover { background: var(--bg-hover); color: var(--text); }
+  .sb-item.active { background: var(--accent-dim); color: var(--accent); }
+  .sb-bottom { padding: 16px 24px 24px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--text-dim); }
+  .sb-bottom a { color: var(--text-muted); text-decoration: none; }
+  .sb-bottom a:hover { color: var(--text); }
 
-/* ===== Hero ===== */
-.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;background:var(--navy)}
-.hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#0F1A30 0%,#1B2A4A 40%,#2C3E60 70%,#1B2A4A 100%)}
-.hero-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(200,164,92,.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(200,164,92,.06) 0%,transparent 50%),radial-gradient(ellipse at 60% 80%,rgba(27,42,74,.3) 0%,transparent 50%)}
-.hero-pattern{position:absolute;inset:0;opacity:.03;background-image:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,.5) 2px,rgba(255,255,255,.5) 3px),repeating-linear-gradient(90deg,transparent,transparent 2px,rgba(255,255,255,.5) 2px,rgba(255,255,255,.5) 3px)}
-.hero-glow{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(200,164,92,.15) 0%,transparent 70%);top:50%;left:30%;transform:translate(-50%,-50%);filter:blur(60px)}
-.hero-content{position:relative;z-index:2;max-width:800px;padding:120px 24px 80px}
-.hero-tag{display:inline-flex;align-items:center;gap:8px;color:var(--gold);font-size:.88rem;font-weight:500;letter-spacing:.1em;margin-bottom:24px;opacity:0;animation:fadeUp .8s ease forwards}
-.hero-tag::before{content:'';width:36px;height:1px;background:var(--gold)}
-.hero h1{font-size:3.6rem;font-weight:800;line-height:1.25;color:#fff;margin-bottom:20px;opacity:0;animation:fadeUp .8s .15s ease forwards}
-.hero h1 em{font-style:normal;color:var(--gold)}
-.hero-sub{font-size:1.15rem;color:rgba(255,255,255,.7);line-height:1.8;max-width:540px;margin-bottom:36px;opacity:0;animation:fadeUp .8s .3s ease forwards}
-.hero-btns{display:flex;gap:16px;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .45s ease forwards}
-.btn{padding:14px 36px;border-radius:50px;font-size:.95rem;font-weight:600;letter-spacing:.04em;cursor:pointer;transition:var(--transition);text-decoration:none;display:inline-flex;align-items:center;gap:8px;border:none}
-.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-deep));color:#fff;box-shadow:0 4px 20px rgba(184,146,46,.35)}
-.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(184,146,46,.5)}
-.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35)}
-.btn-outline:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.6)}
-.hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;opacity:0;animation:fadeUp .8s .6s ease forwards}
-.hero-scroll span{display:block;width:1px;height:40px;background:rgba(255,255,255,.3);margin:0 auto 8px}
-.hero-scroll i{color:rgba(255,255,255,.4);font-size:.8rem;animation:bounce 2s infinite}
+  /* ── Hamburger ── */
+  .hamburger { display: none; position: fixed; top: 14px; left: 14px; z-index: 30; width: 36px; height: 36px; border-radius: 8px; background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; align-items: center; justify-content: center; }
+  .hamburger span { display: block; width: 18px; height: 2px; background: var(--text); border-radius: 2px; position: relative; transition: .2s; }
+  .hamburger span::before, .hamburger span::after { content:''; position: absolute; left: 0; width: 100%; height: 2px; background: var(--text); border-radius: 2px; transition: .2s; }
+  .hamburger span::before { top: -6px; }
+  .hamburger span::after { top: 6px; }
+  .hamburger.open span { background: transparent; }
+  .hamburger.open span::before { top: 0; transform: rotate(45deg); }
+  .hamburger.open span::after { top: 0; transform: rotate(-45deg); }
 
-@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 15; }
 
-/* ===== Section Common ===== */
-.section{padding:100px 0}
-.section-dark{background:var(--navy);color:#fff}
-.section-dark .section-tag{color:var(--gold-light)}
-.section-dark h2,.section-dark h3{color:#fff}
-.section-dark .section-header p{color:rgba(255,255,255,.6)}
-.section-light{background:var(--cream-dark)}
+  /* ── Top bar ── */
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 24px 0 16px; position: sticky; top: 0; background: var(--bg); z-index: 5; }
+  .topbar h1 { font-size: 24px; font-weight: 700; }
+  .btn-export { padding: 8px 18px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); font-size: 13px; cursor: pointer; transition: background .15s; display: flex; align-items: center; gap: 6px; }
+  .btn-export:hover { background: var(--bg-hover); }
 
-/* ===== About ===== */
-.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-.about-text p{color:var(--text-light);margin-bottom:16px;font-size:1.02rem;line-height:1.9}
-.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:32px}
-.stat-card{background:var(--white);padding:24px;border-radius:var(--radius-lg);text-align:center;border:1px solid var(--border);transition:var(--transition)}
-.stat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--gold-light)}
-.stat-card .num{font-size:2.2rem;font-weight:800;color:var(--gold-deep);line-height:1.2}
-.stat-card .num span{font-size:1rem;font-weight:600}
-.stat-card .lbl{font-size:.82rem;color:var(--text-light);margin-top:4px}
-.about-visual{position:relative;height:420px;border-radius:var(--radius-lg);overflow:hidden;background:linear-gradient(135deg,var(--navy),var(--navy-light))}
-.about-visual::before{content:'';position:absolute;inset:0;background:linear-gradient(45deg,transparent 30%,rgba(200,164,92,.12) 70%)}
-.about-visual::after{content:'';position:absolute;top:30px;right:30px;bottom:30px;left:30px;border:1px solid rgba(200,164,92,.25);border-radius:8px}
-.about-deco{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:rgba(255,255,255,.15);font-size:5rem;font-weight:900;letter-spacing:.15em}
+  /* ── Info banner ── */
+  .info-banner { background: var(--accent-dim); border: 1px solid rgba(59,130,246,.25); border-radius: 10px; padding: 12px 18px; font-size: 13px; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
 
-/* ===== Business ===== */
-.biz-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-.biz-card{background:var(--white);border-radius:var(--radius-lg);padding:36px 28px;text-align:center;border:1px solid var(--border);transition:var(--transition);position:relative;overflow:hidden}
-.biz-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-deep));transform:scaleX(0);transition:var(--transition)}
-.biz-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
-.biz-card:hover::before{transform:scaleX(1)}
-.biz-icon{width:64px;height:64px;margin:0 auto 20px;background:linear-gradient(135deg,rgba(200,164,92,.1),rgba(200,164,92,.05));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:var(--gold-deep)}
-.biz-card h3{margin-bottom:10px;color:var(--navy)}
-.biz-card p{font-size:.9rem;color:var(--text-light);line-height:1.7}
+  /* ── Stat cards ── */
+  .stat-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; }
+  .stat-card .label { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; }
+  .stat-card .value { font-size: 28px; font-weight: 700; font-family: var(--font-mono); }
+  .stat-card .sub { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+  .stat-card .actions { margin-top: 14px; display: flex; gap: 10px; align-items: center; }
+  .btn-blue { padding: 7px 18px; border-radius: 8px; background: var(--accent); color: #fff; border: none; cursor: pointer; font-size: 13px; font-weight: 600; transition: opacity .15s; }
+  .btn-blue:hover { opacity: .85; }
+  .alert-tag { font-size: 12px; color: #f59e0b; background: rgba(245,158,11,.12); padding: 4px 10px; border-radius: 6px; }
 
-/* ===== Projects ===== */
-.projects-showcase{display:flex;flex-direction:column;gap:32px}
-.project-item{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;background:var(--white);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);transition:var(--transition)}
-.project-item:hover{box-shadow:var(--shadow-lg)}
-.project-item.reverse{grid-template-columns:1fr 1.2fr}
-.project-item.reverse .proj-img{order:2}
-.project-item.reverse .proj-info{order:1}
-.proj-img{position:relative;min-height:320px;overflow:hidden}
-.proj-img-bg{position:absolute;inset:0;transition:transform .6s ease}
-.project-item:hover .proj-img-bg{transform:scale(1.05)}
-.proj-img-bg.p1{background:linear-gradient(135deg,#2C3E60,#1B2A4A,var(--navy-light))}
-.proj-img-bg.p2{background:linear-gradient(135deg,#3C2A3A,#2A1B3A,#3A2A4A)}
-.proj-img-bg.p3{background:linear-gradient(135deg,#2A3A3A,#1B2A3A,#2A3A4A)}
-.proj-img-bg.p4{background:linear-gradient(135deg,#2A3A2A,#1B2A1B,#2A4A2A)}
-.proj-img-bg.p5{background:linear-gradient(135deg,#2A2A3A,#1B1B2A,#2A2A4A)}
-.proj-img-overlay{position:absolute;inset:0;background:radial-gradient(circle at 30% 50%,rgba(200,164,92,.15) 0%,transparent 60%)}
-.proj-tag{position:absolute;top:24px;left:24px;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);color:var(--gold);padding:6px 16px;border-radius:20px;font-size:.78rem;font-weight:600;letter-spacing:.06em;z-index:1}
-.proj-info{padding:40px 40px 40px 0}
-.project-item.reverse .proj-info{padding:40px 0 40px 40px}
-.proj-info h3{font-size:1.5rem;margin-bottom:8px;color:var(--navy)}
-.proj-location{font-size:.85rem;color:var(--gold-deep);font-weight:500;margin-bottom:16px}
-.proj-location i{margin-right:6px}
-.proj-info p{color:var(--text-light);font-size:.95rem;line-height:1.8;margin-bottom:20px}
-.proj-features{display:flex;flex-wrap:wrap;gap:8px}
-.proj-feature{padding:6px 14px;background:var(--cream);border-radius:20px;font-size:.8rem;color:var(--navy);font-weight:500}
+  /* ── Month tabs ── */
+  .month-tabs { display: flex; gap: 6px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 4px; }
+  .month-tab { flex-shrink: 0; padding: 7px 16px; border-radius: 8px; font-size: 13px; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; transition: .15s; }
+  .month-tab:hover { border-color: var(--text-dim); color: var(--text); }
+  .month-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
 
-/* ===== Honors ===== */
-.honors-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-.honor-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-lg);padding:32px 24px;text-align:center;transition:var(--transition);backdrop-filter:blur(4px)}
-.honor-card:hover{background:rgba(255,255,255,.1);transform:translateY(-4px)}
-.honor-year{font-size:.82rem;color:var(--gold);font-weight:600;letter-spacing:.1em;margin-bottom:12px}
-.honor-card h4{font-size:1.05rem;margin-bottom:8px;color:#fff;font-weight:600}
-.honor-card p{font-size:.85rem;color:rgba(255,255,255,.55);line-height:1.6}
+  /* ── Chart cards ── */
+  .charts { display: flex; flex-direction: column; gap: 20px; }
+  .chart-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; }
+  .chart-card .cc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .chart-card .cc-title { font-size: 14px; color: var(--text-muted); }
+  .chart-card .cc-value { font-size: 22px; font-weight: 700; font-family: var(--font-mono); }
+  .chart-card .cc-meta { font-size: 13px; color: var(--text-dim); margin-top: 2px; }
+  .chart-card canvas { display: block; margin-top: 12px; }
 
-/* ===== News ===== */
-.news-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-.news-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);transition:var(--transition)}
-.news-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
-.news-img{height:180px;position:relative;overflow:hidden}
-.news-img-bg{position:absolute;inset:0;transition:transform .5s ease}
-.news-card:hover .news-img-bg{transform:scale(1.05)}
-.news-img-bg.n1{background:linear-gradient(135deg,#8B7355,#6B5B4A,#A08B6A)}
-.news-img-bg.n2{background:linear-gradient(135deg,#5A6B7A,#4A5B6A,#6A7B8A)}
-.news-img-bg.n3{background:linear-gradient(135deg,#7A6B5A,#6A5B4A,#8A7B6A)}
-.news-img-bg.n4{background:linear-gradient(135deg,#4A5A6A,#3A4A5A,#5A6A7A)}
-.news-date{position:absolute;top:16px;left:16px;background:var(--gold-deep);color:#fff;padding:6px 14px;border-radius:6px;font-size:.75rem;font-weight:700;z-index:1}
-.news-body{padding:20px}
-.news-body h4{font-size:1rem;margin-bottom:8px;color:var(--navy);line-height:1.5}
-.news-body p{font-size:.85rem;color:var(--text-light);line-height:1.6}
-
-/* ===== Contact ===== */
-.contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:48px}
-.contact-info h3{color:var(--navy);margin-bottom:24px;font-size:1.5rem}
-.contact-item{display:flex;align-items:flex-start;gap:14px;margin-bottom:24px}
-.contact-icon{width:44px;height:44px;background:linear-gradient(135deg,rgba(200,164,92,.12),rgba(200,164,92,.06));border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--gold-deep);font-size:1.1rem;flex-shrink:0}
-.contact-item .ci h4{font-size:.95rem;color:var(--navy);margin-bottom:2px}
-.contact-item .ci p{font-size:.88rem;color:var(--text-light)}
-.contact-form{background:var(--white);padding:36px;border-radius:var(--radius-lg);border:1px solid var(--border);box-shadow:var(--shadow)}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.form-group{margin-bottom:16px}
-.form-group label{display:block;font-size:.85rem;font-weight:600;color:var(--navy);margin-bottom:6px}
-.form-group input,.form-group textarea,.form-group select{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:8px;font-size:.92rem;color:var(--text);background:var(--cream);transition:var(--transition);font-family:inherit;outline:none}
-.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,164,92,.1)}
-.form-group textarea{resize:vertical;min-height:120px}
-.btn-submit{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold-deep));color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:600;letter-spacing:.04em;cursor:pointer;transition:var(--transition)}
-.btn-submit:hover{box-shadow:0 6px 24px rgba(184,146,46,.4);transform:translateY(-1px)}
-
-/* ===== Footer ===== */
-.footer{background:#131A2E;color:rgba(255,255,255,.65);padding:60px 0 0}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.08)}
-.footer-about .flogo{display:flex;align-items:center;gap:10px;margin-bottom:16px;font-size:1.2rem;font-weight:700;color:#fff}
-.footer-about p{font-size:.85rem;line-height:1.8;margin-bottom:16px}
-.footer-social{display:flex;gap:12px}
-.footer-social a{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);text-decoration:none;transition:var(--transition);font-size:.85rem}
-.footer-social a:hover{background:var(--gold-deep);border-color:var(--gold-deep);color:#fff}
-.footer h4{font-size:1rem;color:#fff;margin-bottom:20px;font-weight:600}
-.footer-links{list-style:none}
-.footer-links li{margin-bottom:10px}
-.footer-links a{color:rgba(255,255,255,.5);text-decoration:none;font-size:.85rem;transition:var(--transition)}
-.footer-links a:hover{color:var(--gold)}
-.footer-bottom{text-align:center;padding:24px 0;font-size:.8rem;color:rgba(255,255,255,.3)}
-
-/* ===== Back to Top ===== */
-.back-top{position:fixed;bottom:40px;right:30px;width:44px;height:44px;background:var(--gold-deep);color:#fff;border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;opacity:0;visibility:hidden;transition:var(--transition);z-index:999;box-shadow:0 4px 16px rgba(184,146,46,.35)}
-.back-top.visible{opacity:1;visibility:visible}
-.back-top:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(184,146,46,.5)}
-
-/* ===== Mobile Nav ===== */
-.mobile-menu{position:fixed;top:0;right:-100%;width:280px;height:100vh;background:var(--navy);z-index:1001;padding:100px 32px 40px;transition:.4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;gap:12px}
-.mobile-menu.open{right:0}
-.mobile-menu a{color:rgba(255,255,255,.75);text-decoration:none;font-size:1.1rem;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08);transition:var(--transition)}
-.mobile-menu a:hover{color:var(--gold)}
-.mobile-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;opacity:0;visibility:hidden;transition:var(--transition)}
-.mobile-overlay.open{opacity:1;visibility:visible}
-
-/* ===== Responsive ===== */
-@media(max-width:1024px){
-  .biz-grid{grid-template-columns:repeat(2,1fr)}
-  .honors-grid{grid-template-columns:repeat(2,1fr)}
-  .news-grid{grid-template-columns:repeat(2,1fr)}
-  .footer-grid{grid-template-columns:1fr 1fr}
-  .project-item,.project-item.reverse{grid-template-columns:1fr}
-  .proj-img{min-height:240px}
-  .proj-info,.project-item.reverse .proj-info{padding:28px}
-  .contact-grid{grid-template-columns:1fr}
-}
-@media(max-width:768px){
-  h2{font-size:1.8rem}
-  .hero h1{font-size:2.4rem}
-  .section{padding:64px 0}
-  .about-grid{grid-template-columns:1fr}
-  .about-visual{height:280px}
-  .biz-grid{grid-template-columns:1fr}
-  .honors-grid{grid-template-columns:1fr}
-  .news-grid{grid-template-columns:1fr}
-  .nav-links{display:none}
-  .hamburger{display:flex}
-  .footer-grid{grid-template-columns:1fr;gap:32px}
-  .form-row{grid-template-columns:1fr}
-}
-@media(max-width:480px){
-  .hero h1{font-size:1.9rem}
-  .hero-sub{font-size:1rem}
-  .hero-btns{flex-direction:column}
-  .btn{text-align:center;justify-content:center}
-  .about-stats{grid-template-columns:1fr 1fr;gap:12px}
-  .stat-card{padding:16px}
-  .stat-card .num{font-size:1.6rem}
-  .container{padding:0 16px}
-  .nav-inner{padding:0 16px;height:64px}
-  .section-header{margin-bottom:32px}
-}
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .hamburger { display: flex; }
+    .overlay.open { display: block; }
+    .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main { padding: 0 16px 32px; }
+    .topbar { padding-top: 60px; flex-wrap: wrap; gap: 8px; }
+    .topbar h1 { font-size: 20px; }
+    .stat-cards { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
 
-<!-- ===== Navbar ===== -->
-<nav class="navbar" id="navbar">
-  <div class="nav-inner">
-    <a href="#" class="logo">
-      <span class="logo-icon">鼎</span>
-      <span>鼎盛集团</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#home" class="active">首页</a></li>
-      <li><a href="#about">关于我们</a></li>
-      <li><a href="#business">核心业务</a></li>
-      <li><a href="#projects">代表项目</a></li>
-      <li><a href="#honors">企业荣誉</a></li>
-      <li><a href="#news">新闻动态</a></li>
-      <li><a href="#contact">联系我们</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="菜单">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
+<div class="app">
 
-<!-- ===== Mobile Menu ===== -->
-<div class="mobile-overlay" id="mobileOverlay"></div>
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#home">首页</a>
-  <a href="#about">关于我们</a>
-  <a href="#business">核心业务</a>
-  <a href="#projects">代表项目</a>
-  <a href="#honors">企业荣誉</a>
-  <a href="#news">新闻动态</a>
-  <a href="#contact">联系我们</a>
+  <!-- Hamburger -->
+  <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="菜单"><span></span></button>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">DeepSeek 开放平台</div>
+    <div class="sb-divider"></div>
+    <nav class="sb-nav">
+      <div class="sb-item active">📊 用量信息</div>
+      <div class="sb-item">🔑 API keys</div>
+      <div class="sb-item">💰 充值</div>
+      <div class="sb-item">📄 账单</div>
+      <div class="sb-item">📚 接口文档</div>
+      <div class="sb-item">❓ 常见问题</div>
+      <div class="sb-item">💎 产品定价</div>
+      <div class="sb-item">🔌 实用集成</div>
+      <div class="sb-item">✉️ 联系我们</div>
+      <div class="sb-item">👤 个人信息</div>
+    </nav>
+    <div class="sb-divider"></div>
+    <div class="sb-bottom">
+      <a href="#">💬 网页版免费对话</a>
+      <a href="#">🟢 服务状态</a>
+      <a href="#">📜 法律信息</a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Top bar -->
+    <div class="topbar">
+      <h1>用量信息</h1>
+      <button class="btn-export" onclick="exportData()">📥 导出数据</button>
+    </div>
+
+    <!-- Info banner -->
+    <div class="info-banner">
+      <span>🎉</span>
+      <span>DeepSeek-V4 预览版本发布！体验新一代模型能力，立即前往接口文档查看详情。</span>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="label">充值余额</div>
+        <div class="value">¥38.51 <span style="font-size:14px;color:var(--text-muted);">CNY</span></div>
+        <div class="actions"><button class="btn-blue">去充值</button></div>
+      </div>
+      <div class="stat-card">
+        <div class="label">本月消费</div>
+        <div class="value">¥17.33 <span style="font-size:14px;color:var(--text-muted);">CNY</span></div>
+        <div class="sub">日均消费 ¥0.58</div>
+        <div class="actions"><span class="alert-tag">⚠ 余额低于 ¥20 时将触发预警</span></div>
+      </div>
+    </div>
+
+    <!-- Month tabs -->
+    <div class="month-tabs" id="monthTabs"></div>
+
+    <!-- Chart cards -->
+    <div class="charts">
+      <div class="chart-card">
+        <div class="cc-header"><span class="cc-title">消费金额</span></div>
+        <div class="cc-value">¥17.33</div>
+        <canvas id="chartCost" height="240"></canvas>
+      </div>
+
+      <div class="chart-card">
+        <div class="cc-header"><span class="cc-title">deepseek-v4-pro</span></div>
+        <div class="cc-value" style="color:var(--accent)">537,690 <span style="font-size:14px;color:var(--text-muted);">Tokens</span></div>
+        <div class="cc-meta">API 请求次数 <b>26</b></div>
+        <canvas id="chartPro" height="240"></canvas>
+      </div>
+
+      <div class="chart-card">
+        <div class="cc-header"><span class="cc-title">deepseek-v4-flash</span></div>
+        <div class="cc-value" style="color:var(--accent)">3,185 <span style="font-size:14px;color:var(--text-muted);">次</span></div>
+        <div class="cc-meta">API 请求次数 <b>3,185</b></div>
+        <canvas id="chartFlash" height="240"></canvas>
+      </div>
+    </div>
+
+  </main>
 </div>
 
-<!-- ===== Hero ===== -->
-<section class="hero" id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-pattern"></div>
-  <div class="hero-glow"></div>
-  <div class="hero-content container">
-    <div class="hero-tag">DINGSHENG GROUP</div>
-    <h1>鼎立天下<br><em>盛世筑家</em></h1>
-    <p class="hero-sub">2003年创立于深圳，深耕高端地产二十一载。<br>以品质为基石，以创新为驱动，为城市筑就时代地标，为万家点亮理想生活。</p>
-    <div class="hero-btns">
-      <a href="#projects" class="btn btn-gold"><i class="fa-solid fa-building-columns"></i> 探索项目</a>
-      <a href="#contact" class="btn btn-outline"><i class="fa-solid fa-envelope"></i> 商务合作</a>
-    </div>
-  </div>
-  <div class="hero-scroll">
-    <span></span>
-    <i class="fa-solid fa-chevron-down"></i>
-  </div>
-</section>
-
-<!-- ===== About ===== -->
-<section class="section" id="about">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-tag">About Us</div>
-      <h2>关于鼎盛</h2>
-      <p>二十一载匠心耕耘，以城市共建者的姿态，持续推动中国城市化进程。</p>
-    </div>
-    <div class="about-grid">
-      <div class="about-text">
-        <p>鼎盛集团成立于2003年，总部位于中国深圳，是一家以高端房地产开发为核心，涵盖商业运营、智慧社区、城市更新等多元业务的综合性投资集团。</p>
-        <p>集团始终秉持<strong>"品质为本、创新为魂、诚信致远、责任为先"</strong>的核心价值观，在高端住宅、商业综合体、智慧社区、城市更新四大领域持续深耕，累计开发面积超过8000万平方米。</p>
-        <p>凭借卓越的产品力与品牌影响力，鼎盛已布局全国30余座核心城市，服务超过1000万业主，成为中国高端地产领域的标杆企业。</p>
-        <div class="about-stats">
-          <div class="stat-card">
-            <div class="num">2003<span>年</span></div>
-            <div class="lbl">集团成立</div>
-          </div>
-          <div class="stat-card">
-            <div class="num">200<span>+</span></div>
-            <div class="lbl">员工人数 (含子公司)</div>
-          </div>
-          <div class="stat-card">
-            <div class="num">30<span>+</span></div>
-            <div class="lbl">覆盖城市</div>
-          </div>
-          <div class="stat-card">
-            <div class="num">1000<span>万+</span></div>
-            <div class="lbl">服务业主</div>
-          </div>
-        </div>
-      </div>
-      <div class="about-visual">
-        <div class="about-deco">鼎盛</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== Business ===== -->
-<section class="section section-light" id="business">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-tag">Our Business</div>
-      <h2>核心业务</h2>
-      <p>四大业务板块协同发展，构建城市美好生活生态圈。</p>
-    </div>
-    <div class="biz-grid">
-      <div class="biz-card">
-        <div class="biz-icon"><i class="fa-solid fa-building"></i></div>
-        <h3>高端住宅</h3>
-        <p>以国际视野与匠心品质打造城市标杆人居，从建筑美学到空间体验，重新定义高端生活方式。</p>
-      </div>
-      <div class="biz-card">
-        <div class="biz-icon"><i class="fa-solid fa-city"></i></div>
-        <h3>商业综合体</h3>
-        <p>聚合商业、办公、酒店、文化等多元业态，塑造城市活力中心，驱动区域经济繁荣。</p>
-      </div>
-      <div class="biz-card">
-        <div class="biz-icon"><i class="fa-solid fa-microchip"></i></div>
-        <h3>智慧社区</h3>
-        <p>融合物联网、AI与绿色科技，构建安全、便捷、低碳的智慧生活场景，引领未来人居新范式。</p>
-      </div>
-      <div class="biz-card">
-        <div class="biz-icon"><i class="fa-solid fa-hammer"></i></div>
-        <h3>城市更新</h3>
-        <p>以有机更新理念激活城市存量空间，平衡历史文脉传承与现代功能重塑，赋能城市可持续发展。</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== Projects ===== -->
-<section class="section" id="projects">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-tag">Featured Projects</div>
-      <h2>代表项目</h2>
-      <p>每一座建筑都是对城市精神的深刻理解与敬意表达。</p>
-    </div>
-    <div class="projects-showcase">
-      <!-- Project 1: 壹号院 -->
-      <div class="project-item">
-        <div class="proj-img">
-          <div class="proj-img-bg p1"></div>
-          <div class="proj-img-overlay"></div>
-          <div class="proj-tag">高端住宅</div>
-        </div>
-        <div class="proj-info">
-          <h3>鼎盛·壹号院</h3>
-          <div class="proj-location"><i class="fa-solid fa-location-dot"></i> 深圳 · 南山</div>
-          <p>鼎盛TOP系开山之作，择址深圳湾核心地段，由国际大师团队联袂打造。270°环幕景观、私家空中花园、定制级精装体系，仅168席限量臻藏。</p>
-          <div class="proj-features">
-            <span class="proj-feature">270°环幕</span>
-            <span class="proj-feature">空中花园</span>
-            <span class="proj-feature">定制精装</span>
-            <span class="proj-feature">仅168席</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 2: 国际金融中心 -->
-      <div class="project-item reverse">
-        <div class="proj-img">
-          <div class="proj-img-bg p2"></div>
-          <div class="proj-img-overlay"></div>
-          <div class="proj-tag">商业综合体</div>
-        </div>
-        <div class="proj-info">
-          <h3>鼎盛国际金融中心</h3>
-          <div class="proj-location"><i class="fa-solid fa-location-dot"></i> 上海 · 浦东</div>
-          <p>320米超高层城市地标，集5A甲级写字楼、五星级酒店、高端商业于一体。LEED金级认证，以绿色建筑标准定义未来商务新高度。</p>
-          <div class="proj-features">
-            <span class="proj-feature">320m地标</span>
-            <span class="proj-feature">LEED金级</span>
-            <span class="proj-feature">5A甲级</span>
-            <span class="proj-feature">五星酒店</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 3: 天玺 -->
-      <div class="project-item">
-        <div class="proj-img">
-          <div class="proj-img-bg p3"></div>
-          <div class="proj-img-overlay"></div>
-          <div class="proj-tag">高端住宅</div>
-        </div>
-        <div class="proj-info">
-          <h3>鼎盛·天玺</h3>
-          <div class="proj-location"><i class="fa-solid fa-location-dot"></i> 北京 · 朝阳</div>
-          <p>坐拥城市核心区位，以东方美学融合现代建筑语言。1.2超低容积率，打造城中稀有的低密奢居典范。</p>
-          <div class="proj-features">
-            <span class="proj-feature">低密奢居</span>
-            <span class="proj-feature">东方美学</span>
-            <span class="proj-feature">1.2容积率</span>
-            <span class="proj-feature">核心区位</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 4: 智慧谷 -->
-      <div class="project-item reverse">
-        <div class="proj-img">
-          <div class="proj-img-bg p4"></div>
-          <div class="proj-img-overlay"></div>
-          <div class="proj-tag">智慧社区</div>
-        </div>
-        <div class="proj-info">
-          <h3>鼎盛智慧谷</h3>
-          <div class="proj-location"><i class="fa-solid fa-location-dot"></i> 杭州 · 余杭</div>
-          <p>鼎盛智慧社区旗舰项目，全面搭载AIoT智能系统、全域人脸识别、无人配送、智慧能源管理。以科技赋能生活，打造未来社区样板。</p>
-          <div class="proj-features">
-            <span class="proj-feature">AIoT系统</span>
-            <span class="proj-feature">无人配送</span>
-            <span class="proj-feature">智慧能源</span>
-            <span class="proj-feature">未来社区</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 5: 滨海湾 -->
-      <div class="project-item">
-        <div class="proj-img">
-          <div class="proj-img-bg p5"></div>
-          <div class="proj-img-overlay"></div>
-          <div class="proj-tag">城市更新</div>
-        </div>
-        <div class="proj-info">
-          <h3>鼎盛·滨海湾</h3>
-          <div class="proj-location"><i class="fa-solid fa-location-dot"></i> 广州 · 南沙</div>
-          <p>粤港澳大湾区城市更新旗舰项目，保留原生海岸生态，植入文创商业、滨海度假、品质居住三大功能，焕新城市滨海岸线。</p>
-          <div class="proj-features">
-            <span class="proj-feature">大湾区核心</span>
-            <span class="proj-feature">滨海度假</span>
-            <span class="proj-feature">文创商业</span>
-            <span class="proj-feature">生态保留</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== Honors ===== -->
-<section class="section section-dark" id="honors">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-tag">Honors & Awards</div>
-      <h2>企业荣誉</h2>
-      <p>每一份认可都是前行的动力，卓越品质铸就行业典范。</p>
-    </div>
-    <div class="honors-grid">
-      <div class="honor-card">
-        <div class="honor-year">2025</div>
-        <h4>中国房地产百强企业</h4>
-        <p>连续第八年蝉联，综合实力排名TOP30</p>
-      </div>
-      <div class="honor-card">
-        <div class="honor-year">2025</div>
-        <h4>中国绿色建筑创新奖</h4>
-        <p>鼎盛智慧谷获评国家级绿色建筑示范项目</p>
-      </div>
-      <div class="honor-card">
-        <div class="honor-year">2024</div>
-        <h4>中国地产金砖奖</h4>
-        <p>鼎盛·壹号院荣获"年度最具价值豪宅"称号</p>
-      </div>
-      <div class="honor-card">
-        <div class="honor-year">2024</div>
-        <h4>中国企业社会责任卓越奖</h4>
-        <p>在教育、扶贫、环保等公益领域累计捐赠超5亿元</p>
-      </div>
-      <div class="honor-card">
-        <div class="honor-year">2023</div>
-        <h4>国际建筑卓越奖（IAA）</h4>
-        <p>鼎盛国际金融中心获国际建筑卓越奖商业类金奖</p>
-      </div>
-      <div class="honor-card">
-        <div class="honor-year">2023</div>
-        <h4>中国智慧城市领军企业</h4>
-        <p>智慧社区解决方案获评行业标杆案例</p>
-      </div>
-      <div class="honor-card">
-        <div class="honor-year">2022</div>
-        <h4>全国质量诚信标杆企业</h4>
-        <p>连续五年获国家市场监督管理总局认证</p>
-      </div>
-      <div class="honor-card">
-        <div class="honor-year">2021</div>
-        <h4>亚洲最佳雇主品牌</h4>
-        <p>人才发展与员工关怀体系获国际权威认可</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== News ===== -->
-<section class="section" id="news">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-tag">News & Updates</div>
-      <h2>新闻动态</h2>
-      <p>关注鼎盛最新动态，了解企业发展前沿。</p>
-    </div>
-    <div class="news-grid">
-      <div class="news-card">
-        <div class="news-img">
-          <div class="news-img-bg n1"></div>
-          <div class="news-date">2026-05</div>
-        </div>
-        <div class="news-body">
-          <h4>鼎盛集团发布2025年度ESG报告，绿色建筑面积突破2000万㎡</h4>
-          <p>报告显示集团全年碳减排同比增长18%，持续领跑行业可持续发展。</p>
-        </div>
-      </div>
-      <div class="news-card">
-        <div class="news-img">
-          <div class="news-img-bg n2"></div>
-          <div class="news-date">2026-04</div>
-        </div>
-        <div class="news-body">
-          <h4>鼎盛·壹号院二期盛大开盘，当日认购率超95%</h4>
-          <p>延续一期卓越口碑，二期产品全线升级，再度刷新深圳豪宅市场热度。</p>
-        </div>
-      </div>
-      <div class="news-card">
-        <div class="news-img">
-          <div class="news-img-bg n3"></div>
-          <div class="news-date">2026-03</div>
-        </div>
-        <div class="news-body">
-          <h4>集团与华为签署战略合作协议，共推智慧社区3.0</h4>
-          <p>双方将在AIoT、数字孪生、低碳能源等领域展开深度合作。</p>
-        </div>
-      </div>
-      <div class="news-card">
-        <div class="news-img">
-          <div class="news-img-bg n4"></div>
-          <div class="news-date">2026-02</div>
-        </div>
-        <div class="news-body">
-          <h4>鼎盛集团荣登《财富》中国500强第186位</h4>
-          <p>较去年上升22位，营收与利润双创新高，综合实力持续增强。</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== Contact ===== -->
-<section class="section section-light" id="contact">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-tag">Contact Us</div>
-      <h2>联系我们</h2>
-      <p>期待与您携手，共创城市美好未来。</p>
-    </div>
-    <div class="contact-grid">
-      <div class="contact-info">
-        <h3>联系方式</h3>
-        <div class="contact-item">
-          <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
-          <div class="ci">
-            <h4>集团总部</h4>
-            <p>广东省深圳市南山区鼎盛中心大厦A座</p>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
-          <div class="ci">
-            <h4>联系电话</h4>
-            <p>+86 755 8888 6666</p>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
-          <div class="ci">
-            <h4>电子邮箱</h4>
-            <p>contact@dingsheng-group.com</p>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon"><i class="fa-solid fa-clock"></i></div>
-          <div class="ci">
-            <h4>工作时间</h4>
-            <p>周一至周五 09:00 - 18:00</p>
-          </div>
-        </div>
-      </div>
-      <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="name">您的姓名 *</label>
-            <input type="text" id="name" placeholder="请输入您的姓名" required>
-          </div>
-          <div class="form-group">
-            <label for="phone">联系电话 *</label>
-            <input type="tel" id="phone" placeholder="请输入您的电话" required>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="email">电子邮箱</label>
-            <input type="email" id="email" placeholder="请输入您的邮箱">
-          </div>
-          <div class="form-group">
-            <label for="interest">关注业务</label>
-            <select id="interest">
-              <option value="">请选择</option>
-              <option>高端住宅</option>
-              <option>商业综合体</option>
-              <option>智慧社区</option>
-              <option>城市更新</option>
-              <option>其它合作</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="message">留言内容 *</label>
-          <textarea id="message" placeholder="请描述您的需求或合作意向..." required></textarea>
-        </div>
-        <button type="submit" class="btn-submit"><i class="fa-solid fa-paper-plane"></i> 提交留言</button>
-      </form>
-    </div>
-  </div>
-</section>
-
-<!-- ===== Footer ===== -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-about">
-        <div class="flogo">
-          <span class="logo-icon" style="width:36px;height:36px;font-size:.9rem;border-radius:8px">鼎</span>
-          <span>鼎盛集团</span>
-        </div>
-        <p>鼎盛集团成立于2003年，总部位于中国深圳。以"鼎立天下，盛世筑家"为使命，致力于成为中国领先的城市综合开发运营商。</p>
-        <div class="footer-social">
-          <a href="#" aria-label="微信"><i class="fa-brands fa-weixin"></i></a>
-          <a href="#" aria-label="微博"><i class="fa-brands fa-weibo"></i></a>
-          <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-        </div>
-      </div>
-      <div>
-        <h4>快速链接</h4>
-        <ul class="footer-links">
-          <li><a href="#about">关于我们</a></li>
-          <li><a href="#business">核心业务</a></li>
-          <li><a href="#projects">代表项目</a></li>
-          <li><a href="#honors">企业荣誉</a></li>
-          <li><a href="#news">新闻动态</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>核心业务</h4>
-        <ul class="footer-links">
-          <li><a href="#business">高端住宅</a></li>
-          <li><a href="#business">商业综合体</a></li>
-          <li><a href="#business">智慧社区</a></li>
-          <li><a href="#business">城市更新</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>联系方式</h4>
-        <ul class="footer-links">
-          <li>深圳市南山区鼎盛中心A座</li>
-          <li>+86 755 8888 6666</li>
-          <li>contact@dingsheng-group.com</li>
-          <li>周一至周五 09:00-18:00</li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2003-2026 鼎盛集团 Dingsheng Group. All rights reserved. | 粤ICP备XXXXXXXX号</p>
-    </div>
-  </div>
-</footer>
-
-<!-- Back to Top -->
-<button class="back-top" id="backTop" aria-label="返回顶部">
-  <i class="fa-solid fa-arrow-up"></i>
-</button>
-
 <script>
-// ===== Navbar scroll effect =====
-const navbar = document.getElementById('navbar');
-const backTop = document.getElementById('backTop');
-window.addEventListener('scroll',()=>{
-  const y=window.scrollY;
-  navbar.classList.toggle('scrolled',y>50);
-  backTop.classList.toggle('visible',y>600);
-});
+// ── Months ──
+const MONTHS = [
+  { label:'2026-6月', yr:2026, mo:6  },
+  { label:'2026-5月', yr:2026, mo:5  },
+  { label:'2026-4月', yr:2026, mo:4  },
+  { label:'2026-3月', yr:2026, mo:3  },
+  { label:'2026-2月', yr:2026, mo:2  },
+  { label:'2026-1月', yr:2026, mo:1  },
+  { label:'2025-12月',yr:2025, mo:12 },
+  { label:'2025-11月',yr:2025, mo:11 },
+  { label:'2025-10月',yr:2025, mo:10 },
+  { label:'2025-9月', yr:2025, mo:9  },
+  { label:'2025-8月', yr:2025, mo:8  },
+  { label:'2025-7月', yr:2025, mo:7  },
+];
 
-// ===== Mobile menu =====
-const hamburger=document.getElementById('hamburger');
-const mobileMenu=document.getElementById('mobileMenu');
-const mobileOverlay=document.getElementById('mobileOverlay');
-const mobileLinks=mobileMenu.querySelectorAll('a');
+let currentMonthIdx = 0;
 
-function toggleMenu(){
-  hamburger.classList.toggle('active');
-  mobileMenu.classList.toggle('open');
-  mobileOverlay.classList.toggle('open');
-  document.body.style.overflow=mobileMenu.classList.contains('open')?'hidden':'';
+// ── Seeded PRNG ──
+function mulberry32(a) {
+  return function() { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
 }
-hamburger.addEventListener('click',toggleMenu);
-mobileOverlay.addEventListener('click',toggleMenu);
-mobileLinks.forEach(a=>a.addEventListener('click',toggleMenu));
+function seeded(seed) { return mulberry32(seed*hash(MONTHS[0].label)); }
+function hash(s) { let h=0; for(let i=0;i<s.length;i++){ h=((h<<5)-h)+s.charCodeAt(i); h|=0; } return Math.abs(h); }
 
-// ===== Active nav link on scroll =====
-const sections=document.querySelectorAll('section[id]');
-const navLinks=document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll',()=>{
-  let current='';
-  sections.forEach(s=>{
-    const top=s.offsetTop-120;
-    if(scrollY>=top)current=s.getAttribute('id');
-  });
-  navLinks.forEach(a=>{
-    a.classList.toggle('active',a.getAttribute('href')==='#'+current);
-  });
+// ── Generate per-month data ──
+const monthData = MONTHS.map((m,i) => {
+  const days = new Date(m.yr, m.mo, 0).getDate();
+  const rng = mulberry32(i * 7919 + 104729);
+  const arr = (n, base, amp) => Array.from({length:n}, (_,j) => Math.max(0, +(base + amp * (0.5 + 0.5*Math.sin(j*0.6 + rng()*3)) + rng()*amp*0.4).toFixed(2)));
+  return {
+    cost:   arr(days, 0.35, 0.25),
+    pro:    arr(days, 1.2, 0.8),
+    flash:  arr(days, 70, 50),
+  };
 });
 
-// ===== Smooth scroll for anchor links =====
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click',e=>{
-    e.preventDefault();
-    const target=document.querySelector(a.getAttribute('href'));
-    if(target)target.scrollIntoView({behavior:'smooth'});
+// ── Current month helper ──
+function data() { return monthData[currentMonthIdx]; }
+function daysInMonth() { const m=MONTHS[currentMonthIdx]; return new Date(m.yr,m.mo,0).getDate(); }
+
+// Compute summary
+function summary(arr) { return arr.reduce((a,b)=>a+b,0).toFixed(2); }
+
+// ── Draw chart ──
+function drawChart(canvasId, values, color, fmt) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.parentElement.clientWidth - 48;
+  canvas.style.width = w + 'px';
+  canvas.width = w * dpr;
+  canvas.height = 240 * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const pad = { top: 16, right: 12, bottom: 32, left: 48 };
+  const pw = w - pad.left - pad.right;
+  const ph = 240 - pad.top - pad.bottom;
+
+  const max = Math.max(...values, 1);
+  const niceMax = Math.ceil(max * 1.2);
+  const scaleY = ph / niceMax;
+
+  ctx.clearRect(0, 0, w, 240);
+
+  // Grid
+  ctx.strokeStyle = '#27272a';
+  ctx.lineWidth = 0.5;
+  const steps = 5;
+  for (let i=0;i<=steps;i++) {
+    const y = pad.top + ph * (i/steps);
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(w-pad.right, y); ctx.stroke();
+  }
+
+  // Y labels
+  ctx.fillStyle = '#71717a';
+  ctx.font = '11px ' + getComputedStyle(document.body).fontFamily;
+  ctx.textAlign = 'right';
+  for (let i=0;i<=steps;i++) {
+    const val = niceMax * (1 - i/steps);
+    const y = pad.top + ph * (i/steps);
+    ctx.fillText(fmt ? fmt(val) : (val >= 1000 ? (val/1000).toFixed(1)+'k' : val.toFixed(1)), pad.left-6, y+4);
+  }
+
+  // X labels
+  ctx.textAlign = 'center';
+  const days = values.length;
+  const step = Math.max(1, Math.floor(days / 7));
+  for (let i=0;i<days;i+=step) {
+    const x = pad.left + pw * (i/(days-1));
+    ctx.fillText((i+1)+'日', x, 240-pad.bottom+16);
+  }
+
+  // Line
+  ctx.beginPath();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  values.forEach((v,i) => {
+    const x = pad.left + pw * (i/(days-1));
+    const y = pad.top + ph - v * scaleY;
+    i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
   });
-});
+  ctx.stroke();
 
-// ===== Back to top =====
-backTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+  // Area fill
+  ctx.lineTo(pad.left + pw, pad.top + ph);
+  ctx.lineTo(pad.left, pad.top + ph);
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(0,pad.top,0,pad.top+ph);
+  grad.addColorStop(0, color+'33');
+  grad.addColorStop(1, color+'05');
+  ctx.fillStyle = grad;
+  ctx.fill();
 
-// ===== Contact form =====
-function handleSubmit(e){
-  e.preventDefault();
-  const btn=e.target.querySelector('.btn-submit');
-  const orig=btn.innerHTML;
-  btn.innerHTML='<i class="fa-solid fa-circle-check"></i> 提交成功！我们会尽快与您联系';
-  btn.style.background='#2E7D32';
-  setTimeout(()=>{
-    btn.innerHTML=orig;
-    btn.style.background='';
-    e.target.reset();
-  },3000);
+  // Dots
+  const dotStep = Math.max(1, Math.floor(days/6));
+  values.forEach((v,i) => {
+    if (i%dotStep!==0 && i!==days-1) return;
+    const x = pad.left + pw * (i/(days-1));
+    const y = pad.top + ph - v * scaleY;
+    ctx.beginPath();
+    ctx.arc(x,y,2.5,0,Math.PI*2);
+    ctx.fillStyle = color;
+    ctx.fill();
+  });
 }
 
-// ===== Intersection Observer for animations =====
-const observer=new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      entry.target.style.opacity='1';
-      entry.target.style.transform='translateY(0)';
-    }
-  });
-},{threshold:.1});
+// ── Render all ──
+function renderAll() {
+  const d = data();
+  const days = daysInMonth();
 
-document.querySelectorAll('.biz-card,.honor-card,.news-card,.stat-card,.project-item').forEach(el=>{
-  el.style.opacity='0';
-  el.style.transform='translateY(20px)';
-  el.style.transition='opacity .6s ease,transform .6s ease';
-  observer.observe(el);
+  // Update cost total
+  const costTotal = summary(d.cost);
+  document.querySelector('.chart-card:nth-child(1) .cc-value').textContent = '¥'+costTotal;
+
+  // Update pro total
+  const proTotal = summary(d.pro).replace(/\.00$/,'');
+  document.querySelector('.chart-card:nth-child(2) .cc-value').innerHTML = proTotal+' <span style="font-size:14px;color:var(--text-muted);">次</span>';
+
+  // Update flash total
+  const flashTotal = +(summary(d.flash)).replace(/\.00$/,'');
+  document.querySelector('.chart-card:nth-child(3) .cc-value').innerHTML = flashTotal.toLocaleString()+' <span style="font-size:14px;color:var(--text-muted);">次</span>';
+  document.querySelector('.chart-card:nth-child(3) .cc-meta').innerHTML = 'API 请求次数 <b>'+flashTotal.toLocaleString()+'</b>';
+
+  drawChart('chartCost', d.cost, '#3b82f6', v=>'¥'+v.toFixed(2));
+  drawChart('chartPro', d.pro, '#3b82f6', v=>v.toFixed(1));
+  drawChart('chartFlash', d.flash, '#3b82f6', v=>v>=1000?(v/1000).toFixed(1)+'k':v.toFixed(0));
+
+  // Update month tabs
+  const tabs = document.getElementById('monthTabs');
+  tabs.innerHTML = MONTHS.map((m,i) =>
+    `<button class="month-tab${i===currentMonthIdx?' active':''}" onclick="selectMonth(${i})">${m.label}</button>`
+  ).join('');
+}
+
+function selectMonth(i) {
+  currentMonthIdx = i;
+  renderAll();
+}
+
+// ── Sidebar toggle ──
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+
+// ── Export ──
+function exportData() {
+  const m = MONTHS[currentMonthIdx];
+  const d = data();
+  const days = daysInMonth();
+  const rows = [['日期','消费金额(CNY)']];
+  for (let i=0;i<days;i++) rows.push([`${m.label} ${i+1}日`, d.cost[i]]);
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `deepseek_usage_${m.label.replace('月','')}.csv`;
+  a.click();
+}
+
+// ── Init ──
+renderAll();
+
+window.addEventListener('resize', () => {
+  const d = data();
+  drawChart('chartCost', d.cost, '#3b82f6', v=>'¥'+v.toFixed(2));
+  drawChart('chartPro', d.pro, '#3b82f6', v=>v.toFixed(1));
+  drawChart('chartFlash', d.flash, '#3b82f6', v=>v>=1000?(v/1000).toFixed(1)+'k':v.toFixed(0));
 });
 </script>
+
 </body>
 </html>
