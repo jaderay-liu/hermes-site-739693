@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8" />
+<title>药水分析图表</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+body {
+    font-family: Arial;
+    margin: 0;
+    background: #0f172a;
+    color: #fff;
+}
+.container {
+    padding: 20px;
+}
+.chart {
+    width: 100%;
+    height: 420px;
+    margin-bottom: 30px;
+    background: #111827;
+    border-radius: 12px;
+}
+h2 {
+    margin: 10px 0;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>SPS / 硫酸 累计状态趋势</h2>
+    <div id="chart1" class="chart"></div>
+
+    <h2>SPS 单次操作分析</h2>
+    <div id="chart2" class="chart"></div>
+</div>
+
+<script>
+// ===================== 数据 =====================
+
+// SPS
+const spsDataRaw = [
+["06/02 10:28", 0.7],
+["06/02 19:56", 3],
+["06/02 22:23", 13],
+["06/03 14:56", 5],
+["06/04 22:20", -4],
+["06/05 09:24", 6],
+["06/05 14:52", 6],
+["06/05 22:01", 7],
+["06/07 20:00", 1],
+["06/07 21:45", 5],
+["06/08 10:40", 5],
+["06/09 10:08", 8],
+["06/09 21:47", -15],
+["06/10 22:46", -15],
+["06/10 23:08", -15],
+["06/11 10:37", 6],
+["06/11 21:57", 5],
+["06/12 09:46", 10]
+];
+
+// 硫酸
+const acidDataRaw = [
+["06/02 09:50", 2],
+["06/02 19:56", 1],
+["06/02 22:23", 1.8],
+["06/03 14:31", 2.5],
+["06/03 23:00", 2.7],
+["06/05 09:24", 1.8],
+["06/05 22:01", 1.2],
+["06/06 09:38", 2.5],
+["06/06 22:38", 2],
+["06/07 07:57", 1],
+["06/07 20:00", 3],
+["06/08 10:39", -2],
+["06/11 21:57", 3],
+["06/12 09:47", 1.2]
+];
+
+// ===================== 累计计算 =====================
+function buildSeries(raw) {
+    let sum = 0;
+    return raw.map(i => {
+        sum += i[1];
+        return [i[0], +sum.toFixed(2)];
+    });
+}
+
+const spsSeries = buildSeries(spsDataRaw);
+const acidSeries = buildSeries(acidDataRaw);
+
+// ===================== 图1：累计趋势 =====================
+const chart1 = echarts.init(document.getElementById('chart1'));
+
+chart1.setOption({
+    backgroundColor: '#111827',
+    tooltip: { trigger: 'axis' },
+    legend: { textStyle: { color: '#fff' } },
+    xAxis: {
+        type: 'category',
+        data: spsSeries.map(i => i[0]),
+        axisLabel: { color: '#aaa' }
+    },
+    yAxis: {
+        type: 'value',
+        axisLabel: { color: '#aaa' }
+    },
+    series: [
+        {
+            name: 'SPS状态',
+            type: 'line',
+            data: spsSeries.map(i => i[1])
+        },
+        {
+            name: '硫酸状态',
+            type: 'line',
+            data: acidSeries.map(i => i[1])
+        }
+    ]
+});
+
+// ===================== 图2：SPS操作柱状图 =====================
+const chart2 = echarts.init(document.getElementById('chart2'));
+
+chart2.setOption({
+    backgroundColor: '#111827',
+    tooltip: { trigger: 'axis' },
+    xAxis: {
+        type: 'category',
+        data: spsDataRaw.map(i => i[0]),
+        axisLabel: { color: '#aaa', rotate: 45 }
+    },
+    yAxis: {
+        type: 'value',
+        axisLabel: { color: '#aaa' }
+    },
+    series: [
+        {
+            name: 'SPS操作',
+            type: 'bar',
+            data: spsDataRaw.map(i => i[1]),
+            itemStyle: {
+                color: function(params) {
+                    return params.value < 0 ? '#ef4444' : '#3b82f6';
+                }
+            }
+        }
+    ]
+});
+
+window.addEventListener('resize', () => {
+    chart1.resize();
+    chart2.resize();
+});
+</script>
+
+</body>
+</html>
