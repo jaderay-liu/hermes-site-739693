@@ -1,729 +1,364 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>登录-鼎盛E學苑</title>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:-apple-system,"PingFang SC","Helvetica Neue",STHeiti,"Microsoft Yahei",sans-serif;
-  color:#262626;
-  background:#fff;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  -webkit-font-smoothing:antialiased;
-}
-
-/* ===== 顶部导航 ===== */
-.top-header{
-  height:60px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 24px;
-  flex-shrink:0;
-}
-.top-header .logo{
-  height:40px;
-  max-width:200px;
-  object-fit:contain;
-}
-.top-header .logo-text{
-  font-size:20px;
-  font-weight:600;
-  color:#262626;
-  letter-spacing:1px;
-}
-
-/* ===== 语言选择器 ===== */
-.lang-selector{position:relative;user-select:none}
-.lang-trigger{
-  display:flex;align-items:center;gap:6px;
-  padding:6px 12px;border-radius:4px;
-  cursor:pointer;font-size:14px;
-  color:#595959;background:transparent;
-  border:1px solid transparent;
-  transition:all 0.2s;
-}
-.lang-trigger:hover{color:#436bff;border-color:#d9d9d9}
-.lang-trigger .earth-icon{width:16px;height:16px}
-.lang-trigger .arrow{width:12px;height:12px;transition:transform 0.2s}
-.lang-selector.open .lang-trigger .arrow{transform:rotate(180deg)}
-.lang-dropdown{
-  display:none;position:absolute;top:100%;right:0;
-  margin-top:4px;min-width:140px;background:#fff;
-  border-radius:4px;box-shadow:0 2px 12px rgba(0,0,0,0.15);
-  z-index:100;overflow:hidden;
-}
-.lang-selector.open .lang-dropdown{display:block}
-.lang-item{
-  display:block;width:100%;padding:10px 16px;font-size:14px;
-  color:#262626;background:transparent;border:none;
-  cursor:pointer;text-align:left;transition:background 0.15s;
-}
-.lang-item:hover{background:#f5f5f5}
-.lang-item.active{color:#436bff;font-weight:500}
-
-/* ===== 主体 ===== */
-.main-container{
-  flex:1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:40px 16px 60px;
-  background:#fff;
-}
-
-/* ===== 登录卡片 ===== */
-.login-card{
-  width:100%;max-width:400px;
-  background:#fff;
-  border-radius:8px;
-  box-shadow:0 0 30px 0 rgba(0,0,0,0.1);
-  padding:40px 32px;
-}
-
-/* ===== Tab 切换 ===== */
-.login-tabs{
-  display:flex;gap:32px;margin-bottom:32px;
-  border-bottom:1px solid #f0f0f0;padding-bottom:16px;
-}
-.tab-btn{
-  font-size:16px;color:#8c8c8c;cursor:pointer;
-  background:none;border:none;padding:0 0 8px;
-  position:relative;font-weight:400;
-  transition:color 0.2s;
-}
-.tab-btn:hover{color:#436bff}
-.tab-btn.active{
-  color:#262626;font-weight:600;
-}
-.tab-btn.active::after{
-  content:'';position:absolute;bottom:-1px;left:50%;
-  transform:translateX(-50%);
-  width:100%;height:2px;background:#436bff;border-radius:1px;
-}
-
-/* ===== 表单区域 ===== */
-.login-form{display:none}
-.login-form.active{display:block}
-
-/* 区号选择器 */
-.area-code-wrap{position:relative;margin-bottom:16px}
-.area-code-trigger{
-  display:flex;align-items:center;justify-content:space-between;
-  width:100%;height:48px;padding:0 12px;
-  border:1px solid #d9d9d9;border-radius:4px;
-  background:#fff;cursor:pointer;font-size:14px;
-  color:#262626;transition:border-color 0.2s;
-}
-.area-code-trigger:hover{border-color:#436bff}
-.area-code-trigger .arrow-sm{
-  width:12px;height:12px;fill:#8c8c8c;transition:transform 0.2s;
-}
-.area-code-wrap.open .area-code-trigger{border-color:#436bff}
-.area-code-wrap.open .arrow-sm{transform:rotate(180deg)}
-.area-code-dropdown{
-  display:none;position:absolute;top:52px;left:0;right:0;
-  background:#fff;border:1px solid #e8e8e8;
-  border-radius:4px;box-shadow:0 2px 12px rgba(0,0,0,0.12);
-  z-index:50;overflow:hidden;max-height:280px;
-}
-.area-code-wrap.open .area-code-dropdown{display:flex;flex-direction:column}
-.area-search{
-  padding:8px 12px;border-bottom:1px solid #f0f0f0;
-}
-.area-search input{
-  width:100%;height:32px;padding:0 8px;
-  border:1px solid #d9d9d9;border-radius:4px;
-  font-size:13px;outline:none;
-}
-.area-search input:focus{border-color:#436bff}
-.area-list{overflow-y:auto;flex:1}
-.area-item{
-  display:flex;align-items:center;padding:10px 12px;
-  font-size:14px;cursor:pointer;transition:background 0.15s;
-  border:none;background:none;width:100%;text-align:left;
-}
-.area-item:hover{background:#f5f5f5}
-.area-item.selected{color:#436bff;font-weight:500}
-.area-item .code{color:#8c8c8c;margin-right:8px;min-width:40px}
-.area-item .name{color:#262626}
-
-/* 输入框 */
-.input-group{margin-bottom:16px}
-.input-group input{
-  width:100%;height:48px;padding:0 12px;
-  border:1px solid #d9d9d9;border-radius:4px;
-  font-size:14px;color:#262626;outline:none;
-  background:#fff;transition:border-color 0.2s,box-shadow 0.2s;
-}
-.input-group input::placeholder{color:#bfbfbf}
-.input-group input:focus{
-  border-color:#436bff;
-  box-shadow:0 0 0 2px rgba(67,107,255,0.1);
-}
-
-/* 验证码行 */
-.sms-row{display:flex;gap:12px}
-.sms-row .input-group{flex:1;margin-bottom:0}
-.sms-btn{
-  height:48px;padding:0 16px;border:1px solid #436bff;
-  border-radius:4px;background:transparent;color:#436bff;
-  font-size:14px;cursor:pointer;white-space:nowrap;
-  transition:all 0.2s;min-width:110px;
-}
-.sms-btn:hover{background:rgba(67,107,255,0.04)}
-.sms-btn:disabled,.sms-btn.counting{
-  color:#bfbfbf;border-color:#d9d9d9;cursor:not-allowed;
-  background:transparent;
-}
-
-/* 隐私政策 */
-.privacy-check{
-  display:flex;align-items:center;gap:8px;
-  margin-bottom:20px;cursor:pointer;font-size:14px;
-  color:#595959;user-select:none;
-}
-.privacy-check input[type="checkbox"]{
-  display:none;
-}
-.privacy-check .check-box{
-  width:16px;height:16px;border:1px solid #d9d9d9;
-  border-radius:2px;display:flex;align-items:center;
-  justify-content:center;flex-shrink:0;transition:all 0.2s;
-}
-.privacy-check input:checked+.check-box{
-  background:#436bff;border-color:#436bff;
-}
-.privacy-check .check-box svg{
-  width:12px;height:12px;fill:#fff;display:none;
-}
-.privacy-check input:checked+.check-box svg{display:block}
-.privacy-check .privacy-link{color:#436bff;cursor:pointer}
-.privacy-check .privacy-link:hover{text-decoration:underline}
-
-/* 登录按钮 */
-.login-btn{
-  width:100%;height:48px;border:none;border-radius:4px;
-  background:#436bff;color:#fff;font-size:16px;
-  font-weight:500;cursor:pointer;
-  transition:background 0.2s,opacity 0.2s;
-  display:flex;align-items:center;justify-content:center;
-  gap:8px;letter-spacing:2px;
-}
-.login-btn:hover{background:#3651d9}
-.login-btn:active{background:#2a42b8}
-.login-btn:disabled{
-  opacity:0.5;cursor:not-allowed;
-}
-.login-btn:disabled:hover{background:#436bff}
-
-/* loading spinner */
-.spinner{
-  width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);
-  border-top-color:#fff;border-radius:50%;
-  animation:spin 0.7s linear infinite;display:none;
-}
-.login-btn.loading .spinner{display:block}
-.login-btn.loading .btn-label{display:none}
+*{margin:0;padding:0;box-sizing:border-box}
+body,html{width:100%;height:100%;color:#262626;font-family:-apple-system,"PingFang SC","Helvetica Neue",STHeiti,"Microsoft Yahei",Tahoma,Simsun,sans-serif;font-size:14px;line-height:22px}
+body{background:#fff}
+.core-login-container{width:100%;min-height:100vh;position:relative}
+.lang-selector{position:absolute;top:20px;right:32px;z-index:2000;height:20px;line-height:20px;font-size:14px;color:#262626;cursor:pointer}
+.lang-selector .current-lang{display:flex;align-items:center;gap:4px;color:#262626}
+.lang-dropdown{display:none;position:absolute;top:100%;right:0;background:#fff;border:1px solid #e9e9e9;box-shadow:0 2px 12px rgba(0,0,0,.1);z-index:10;min-width:120px}
+.lang-dropdown.show{display:block}
+.lang-dropdown div{padding:8px 16px;cursor:pointer;font-size:14px;color:#262626;white-space:nowrap}
+.lang-dropdown div:hover{background:#f5f5f5}
+.content-container{min-width:1200px;height:640px;position:relative;margin:0 auto;display:flex;align-items:center}
+.login-wrapper-right{width:1200px;height:100%;position:relative;margin:0 auto}
+.login-dialog{position:absolute;right:0;top:50%;transform:translateY(-50%);width:400px;background:#fff;border-radius:4px;box-shadow:0 0 30px 0 rgba(0,0,0,.1);padding:50px 40px 90px;box-sizing:border-box}
+.pc-icon{position:absolute;top:4px;right:4px;cursor:pointer;z-index:1}
+.pc-icon .qr-bg{width:0;height:0;border-bottom:60px solid #fff;border-right:60px solid transparent;position:absolute;top:0;right:0;z-index:0}
+.pc-icon svg{position:relative;z-index:1;display:block;margin:4px 0 0 auto;width:32px;height:32px}
+.login-orgname{text-align:center;font-size:24px;font-weight:400;color:#262626;line-height:32px;margin-bottom:32px;position:relative;z-index:1}
+.tab-bar{display:flex;border-bottom:1px solid #e9e9e9;margin-bottom:24px}
+.tab-item{padding:0 0 12px;font-size:16px;color:#757575;cursor:pointer;border-bottom:2px solid transparent;margin-right:40px;line-height:22px;transition:color .2s,border-color .2s}
+.tab-item.active{color:#436bff;border-bottom-color:#436bff}
+.phone-area{display:flex;gap:0;margin-bottom:12px;border:1px solid #d9d9d9;border-radius:4px;overflow:hidden;height:48px}
+.phone-area .area-code{display:flex;align-items:center;padding:0 12px;background:#fafafa;color:#595959;font-size:14px;cursor:pointer;white-space:nowrap;border-right:1px solid #d9d9d9;min-width:90px;gap:4px;user-select:none}
+.phone-area .area-code .arrow{font-size:10px;color:#999}
+.phone-area input{border:none;outline:none;flex:1;height:48px;padding:5px 32px 5px 12px;font-size:14px;color:#595959;background:#fff}
+.phone-area input::placeholder{color:#bfbfbf}
+.area-dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid #e9e9e9;box-shadow:0 2px 12px rgba(0,0,0,.1);z-index:20;width:320px;max-height:300px;overflow-y:auto}
+.area-dropdown.show{display:block}
+.area-dropdown .search-area{width:100%;padding:8px;border-bottom:1px solid #e9e9e9}
+.area-dropdown .search-area input{width:100%;height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 8px;font-size:13px;outline:none}
+.area-dropdown .area-item{padding:6px 12px;cursor:pointer;font-size:14px;color:#595959;display:flex;justify-content:space-between}
+.area-dropdown .area-item:hover{background:#f5f5f5}
+.verify-row{position:relative;margin-bottom:12px}
+.verify-row input{width:100%;height:48px;border:1px solid #d9d9d9;border-radius:4px;padding:8px 70px 8px 15px;font-size:14px;color:#262626;outline:none;transition:border-color .2s}
+.verify-row input:focus{border-color:#436bff}
+.verify-row input::placeholder{color:#bfbfbf}
+.verify-btn{position:absolute;right:4px;top:50%;transform:translateY(-50%);height:38px;padding:0 12px;border:none;background:none;color:#436bff;font-size:13px;cursor:pointer;white-space:nowrap;line-height:38px;transition:color .2s}
+.verify-btn:disabled{color:#bfbfbf;cursor:not-allowed}
+.email-input{margin-bottom:12px}
+.email-input input{width:100%;height:48px;border:1px solid #d9d9d9;border-radius:4px;padding:8px 35px 8px 15px;font-size:14px;color:#262626;outline:none;transition:border-color .2s}
+.email-input input:focus{border-color:#436bff}
+.email-input input::placeholder{color:#bfbfbf}
+.pwd-input{margin-bottom:4px}
+.pwd-input input{width:100%;height:48px;border:1px solid #d9d9d9;border-radius:4px;padding:8px 35px 8px 15px;font-size:14px;color:#262626;outline:none;transition:border-color .2s}
+.pwd-input input:focus{border-color:#436bff}
+.pwd-input input::placeholder{color:#bfbfbf}
+.privacy-row{display:flex;align-items:flex-start;gap:8px;margin:12px 0 8px;font-size:13px;color:#595959;line-height:20px}
+.privacy-row input[type=checkbox]{margin-top:3px;accent-color:#436bff;width:14px;height:14px;cursor:pointer}
+.privacy-row .privacy-link{color:#436bff;cursor:pointer;text-decoration:none}
+.privacy-row .privacy-link:hover{text-decoration:underline}
+.btn-login{width:100%;height:auto;padding:10px 19px;border:none;border-radius:4px;font-size:18px;font-weight:400;color:#fff;background:#a8acb3;cursor:not-allowed;line-height:26px;transition:background .2s;margin-bottom:16px;text-align:center}
+.btn-login.active{background:#436bff;cursor:pointer}
+.btn-login.active:hover{background:#3658d9}
+.btn-login.loading{background:#a8acb3;cursor:not-allowed}
+.spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto}
+.btn-login.loading .spinner{display:block}
+.btn-login.loading .btn-text{display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* 底部链接 */
-.form-footer{
-  margin-top:20px;display:flex;
-  justify-content:space-between;align-items:center;
-}
-.form-footer a,.form-footer button{
-  font-size:13px;color:#8c8c8c;background:none;border:none;
-  cursor:pointer;text-decoration:none;padding:4px 0;
-  transition:color 0.2s;
-}
-.form-footer a:hover,.form-footer button:hover{color:#436bff}
-
-/* 底部协议文字 */
-.agreement-text{
-  text-align:center;font-size:12px;color:#8c8c8c;
-  margin-top:24px;
-}
-.agreement-text .link{color:#436bff;cursor:pointer}
-.agreement-text .link:hover{text-decoration:underline}
-
-/* ===== 页脚 ===== */
-.site-footer{
-  padding:20px 16px;text-align:center;flex-shrink:0;
-  border-top:1px solid #f0f0f0;
-}
-.site-footer .copyright{
-  font-size:12px;color:#8c8c8c;line-height:1.8;
-}
-
-/* ===== 模态弹窗（隐私政策） ===== */
-.modal-overlay{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,0.45);z-index:200;
-  align-items:center;justify-content:center;
-}
-.modal-overlay.open{display:flex}
-.modal-dialog{
-  background:#fff;border-radius:8px;width:90%;
-  max-width:600px;max-height:80vh;
-  display:flex;flex-direction:column;
-  box-shadow:0 4px 24px rgba(0,0,0,0.15);
-}
-.modal-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 24px;border-bottom:1px solid #f0f0f0;
-}
-.modal-header h3{font-size:16px;font-weight:600;color:#262626}
-.modal-close{
-  background:none;border:none;font-size:20px;
-  color:#8c8c8c;cursor:pointer;width:28px;height:28px;
-  display:flex;align-items:center;justify-content:center;
-  border-radius:4px;transition:all 0.2s;
-}
-.modal-close:hover{background:#f5f5f5;color:#262626}
-.modal-body{
-  padding:24px;overflow-y:auto;flex:1;
-  font-size:14px;color:#595959;line-height:1.8;
-}
-.modal-body h4{font-size:14px;color:#262626;margin:16px 0 8px}
-.modal-body p{margin-bottom:12px}
-.modal-footer{
-  padding:16px 24px;border-top:1px solid #f0f0f0;
-  display:flex;justify-content:flex-end;
-}
-.modal-footer button{
-  height:36px;padding:0 24px;border:none;
-  border-radius:4px;background:#436bff;color:#fff;
-  font-size:14px;cursor:pointer;transition:background 0.2s;
-}
-.modal-footer button:hover{background:#3651d9}
-
-/* ===== Toast 提示 ===== */
-.toast{
-  position:fixed;top:24px;left:50%;transform:translateX(-50%);
-  padding:12px 24px;background:#262626;color:#fff;
-  border-radius:4px;font-size:14px;z-index:300;
-  opacity:0;transition:opacity 0.3s;pointer-events:none;
-}
-.toast.show{opacity:1}
-
-/* 响应式 */
-@media(max-width:440px){
-  .login-card{padding:32px 20px;box-shadow:none;border-radius:0}
-  .main-container{padding:20px 0 40px}
-  .top-header{padding:0 16px}
-}
+.footer-links{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#757575}
+.footer-links a{color:#757575;text-decoration:none;cursor:pointer}
+.footer-links a:hover{color:#436bff}
+.footer-links .switch-tab{color:#436bff}
+.copyright-area{text-align:center;padding:16px 0 24px;font-size:12px;color:#8c8c8c;line-height:20px}
+.copyright-area .copy-line{margin-bottom:2px}
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal-content{background:#fff;border-radius:4px;width:600px;max-width:90vw;max-height:80vh;overflow-y:auto;padding:40px 68px;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;font-size:20px;color:#999;cursor:pointer;background:none;border:none}
+.modal-content h3{font-size:18px;font-weight:600;margin-bottom:16px;color:#262626}
+.modal-content p{margin-bottom:12px;font-size:14px;color:#595959;line-height:22px}
+.hidden{display:none}
 </style>
 </head>
 <body>
-
-<!-- 顶部导航 -->
-<header class="top-header">
-  <span class="logo-text">鼎盛E學苑</span>
+<div class="core-login-container">
   <div class="lang-selector" id="langSelector">
-    <div class="lang-trigger" onclick="toggleLang()">
-      <svg class="earth-icon" viewBox="0 0 16 16" fill="none" stroke="#595959" stroke-width="1.2">
-        <circle cx="8" cy="8" r="6"/>
-        <ellipse cx="8" cy="8" rx="2" ry="6"/>
-        <path d="M2 8h12M6 2c1 2 2 4 2 6s-1 4-2 6M10 2c-1 2-2 4-2 6s1 4 2 6"/>
-      </svg>
-      <span id="langLabel">简体中文</span>
-      <svg class="arrow" viewBox="0 0 12 12" fill="#8c8c8c"><path d="M3 4.5l3 3.5 3-3.5"/></svg>
+    <div class="current-lang" onclick="toggleLang()">
+      <span id="currentLang">简体中文</span>
+      <span style="font-size:10px;color:#999">▾</span>
     </div>
-    <div class="lang-dropdown">
-      <button class="lang-item active" data-lang="zh-CN">简体中文</button>
-      <button class="lang-item" data-lang="zh-TW">繁體中文</button>
-      <button class="lang-item" data-lang="en">English</button>
-      <button class="lang-item" data-lang="my">Burmese</button>
+    <div class="lang-dropdown" id="langDropdown">
+      <div onclick="switchLang('简体中文')">简体中文</div>
+      <div onclick="switchLang('繁體中文')">繁體中文</div>
+      <div onclick="switchLang('English')">English</div>
+      <div onclick="switchLang('Burmese')">Burmese</div>
     </div>
   </div>
-</header>
 
-<!-- 主体 -->
-<main class="main-container">
-  <div class="login-card">
+  <div class="content-container">
+    <div class="login-wrapper-right">
+      <div class="login-dialog">
+        <div class="pc-icon">
+          <div class="qr-bg"></div>
+          <svg viewBox="0 0 60 61" fill="none">
+            <path d="M21.333 22.667v-1.334h-4v-4h4V20h2.667v2.667H22.667V25.333H20V28h-2.667v-4H20v-1.333h1.333zM28 28h-5.333v-2.667H25.333V22.667H28V28zM4 4h10.667v10.667H4V4zm2.667 2.667v5.333H12V6.667H6.667zM17.333 4H28v10.667H17.333V4zM20 6.667V12h5.333V6.667H20zM4 17.333h10.667V28H4V17.333zm2.667 2.667v5.333H12V20H6.667zM24 17.333H28V20h-4v-2.667zM8 8h2.667v2.667H8V8zM8 21.333h2.667V24H8v-2.667zM21.333 8H24v2.667h-2.667V8z" fill="#436bff"/></svg>
+        </div>
 
-    <!-- Tab 切换 -->
-    <div class="login-tabs">
-      <button class="tab-btn active" data-tab="sms" onclick="switchTab('sms')">手机短信登录</button>
-      <button class="tab-btn" data-tab="account" onclick="switchTab('account')">账号密码登录</button>
-    </div>
+        <h2 class="login-orgname">鼎盛E學苑</h2>
 
-    <!-- ===== 手机短信登录 ===== -->
-    <form class="login-form active" id="form-sms" onsubmit="return false">
-      <!-- 区号选择 -->
-      <div class="area-code-wrap" id="areaCodeWrap">
-        <button type="button" class="area-code-trigger" onclick="toggleAreaCode()">
-          <span id="areaCodeLabel">+86 中国</span>
-          <svg class="arrow-sm" viewBox="0 0 12 12" fill="#8c8c8c"><path d="M3 4.5l3 3.5 3-3.5"/></svg>
-        </button>
-        <div class="area-code-dropdown">
-          <div class="area-search">
-            <input type="text" id="areaSearch" placeholder="搜索国家/地区" oninput="filterAreas()">
+        <div class="tab-bar">
+          <div class="tab-item active" id="tabSms" onclick="switchTab('sms')">手机短信登录</div>
+          <div class="tab-item" id="tabAccount" onclick="switchTab('account')">账号密码登录</div>
+        </div>
+
+        <!-- SMS Login Form -->
+        <div id="formSms">
+          <div style="position:relative;margin-bottom:12px">
+            <div class="phone-area">
+              <div class="area-code" id="areaCodeBtn" onclick="toggleAreaDropdown()">
+                <span id="areaCodeText">+86 中国</span>
+                <span class="arrow">▾</span>
+              </div>
+              <input type="text" id="phoneInput" placeholder="请输入手机号" oninput="checkForm()">
+            </div>
+            <div class="area-dropdown" id="areaDropdown">
+              <div class="search-area">
+                <input type="text" id="areaSearch" placeholder="搜索国家/区号" oninput="filterAreas()">
+              </div>
+              <div id="areaList"></div>
+            </div>
           </div>
-          <div class="area-list" id="areaList"></div>
+
+          <div class="verify-row">
+            <input type="text" id="smsCode" placeholder="请输入验证码" oninput="checkForm()">
+            <button class="verify-btn" id="sendCodeBtn" onclick="sendCode()">发送验证码</button>
+          </div>
+        </div>
+
+        <!-- Account Login Form -->
+        <div id="formAccount" class="hidden">
+          <div class="email-input">
+            <input type="text" id="accountInput" placeholder="请输入员工邮箱/账号" oninput="checkForm()">
+          </div>
+          <div class="pwd-input">
+            <input type="password" id="pwdInput" placeholder="请输入密码" oninput="checkForm()">
+          </div>
+        </div>
+
+        <div class="privacy-row">
+          <input type="checkbox" id="privacyCheck" onchange="checkForm()">
+          <label for="privacyCheck" style="cursor:pointer">
+            我同意<span class="privacy-link" onclick="showPrivacy()">《隐私政策》</span>内相关内容
+          </label>
+        </div>
+
+        <button class="btn-login" id="loginBtn" onclick="doLogin()">
+          <span class="spinner"></span>
+          <span class="btn-text">登 录</span>
+        </button>
+
+        <div class="footer-links">
+          <a id="switchLink" class="switch-tab" onclick="switchTab('sms')">手机短信登录</a>
+          <a onclick="alert('忘记密码功能仅做演示')">忘记密码？</a>
         </div>
       </div>
-
-      <!-- 手机号 -->
-      <div class="input-group">
-        <input type="tel" id="phone" placeholder="请输入手机号" maxlength="20" oninput="checkSmsForm()">
-      </div>
-
-      <!-- 验证码 -->
-      <div class="sms-row">
-        <div class="input-group">
-          <input type="text" id="smsCode" placeholder="请输入验证码" maxlength="6" oninput="checkSmsForm()">
-        </div>
-        <button type="button" class="sms-btn" id="smsSendBtn" onclick="sendSms()">发送验证码</button>
-      </div>
-
-      <!-- 隐私政策 -->
-      <label class="privacy-check" style="margin-top:16px">
-        <input type="checkbox" id="smsAgree" onchange="checkSmsForm()">
-        <span class="check-box">
-          <svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-6" stroke="none" fill="#fff"/></svg>
-        </span>
-        <span>我同意<span class="privacy-link" onclick="event.stopPropagation();openPrivacy()">《隐私政策》</span>内相关内容</span>
-      </label>
-
-      <!-- 登录按钮 -->
-      <button type="button" class="login-btn" id="smsLoginBtn" disabled onclick="doLogin('sms')">
-        <span class="spinner"></span>
-        <span class="btn-label">登 录</span>
-      </button>
-
-      <!-- 底部 -->
-      <p class="agreement-text">已阅读并同意 <span class="link" onclick="openPrivacy()">《隐私政策》</span></p>
-    </form>
-
-    <!-- ===== 账号密码登录 ===== -->
-    <form class="login-form" id="form-account" onsubmit="return false">
-      <!-- 账号 -->
-      <div class="input-group">
-        <input type="text" id="username" placeholder="请输入员工邮箱/账号" maxlength="100" oninput="checkAccountForm()">
-      </div>
-
-      <!-- 密码 -->
-      <div class="input-group">
-        <input type="password" id="password" placeholder="请输入密码" maxlength="50" oninput="checkAccountForm()">
-      </div>
-
-      <!-- 隐私政策 -->
-      <label class="privacy-check" style="margin-top:4px">
-        <input type="checkbox" id="accountAgree" onchange="checkAccountForm()">
-        <span class="check-box">
-          <svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-6" stroke="none" fill="#fff"/></svg>
-        </span>
-        <span>已阅读并同意 <span class="privacy-link" onclick="event.stopPropagation();openPrivacy()">《隐私政策》</span></span>
-      </label>
-
-      <!-- 登录按钮 -->
-      <button type="button" class="login-btn" id="accountLoginBtn" disabled onclick="doLogin('account')">
-        <span class="spinner"></span>
-        <span class="btn-label">登 录</span>
-      </button>
-
-      <!-- 底部链接 -->
-      <div class="form-footer">
-        <button type="button" onclick="switchTab('sms')">手机短信登录</button>
-        <a href="javascript:void(0)">忘记密码？</a>
-      </div>
-    </form>
-
-  </div>
-</main>
-
-<!-- 页脚 -->
-<footer class="site-footer">
-  <p class="copyright">
-    Copyright &copy; 2026 radnova.com All rights reserved 绚星智慧科技有限公司 版权所有<br>
-    苏ICP备14034064号-6 增值电信业务许可证号：苏B2-20180039 苏州网安备32050502011736号
-  </p>
-</footer>
-
-<!-- 隐私政策弹窗 -->
-<div class="modal-overlay" id="privacyModal" onclick="if(event.target===this)closePrivacy()">
-  <div class="modal-dialog">
-    <div class="modal-header">
-      <h3>隐私政策</h3>
-      <button class="modal-close" onclick="closePrivacy()">&times;</button>
-    </div>
-    <div class="modal-body">
-      <p>欢迎使用鼎盛E學苑学习平台（以下简称"本平台"）。我们非常重视您的隐私和个人信息保护。</p>
-
-      <h4>一、我们收集的信息</h4>
-      <p>1. 注册信息：当您注册账号时，我们需要收集您的手机号码或邮箱地址、姓名、所属企业等基本信息。</p>
-      <p>2. 学习记录：我们会记录您的课程学习进度、考试结果、学习时长等信息。</p>
-      <p>3. 设备信息：我们会收集您使用本平台时的设备型号、操作系统版本、IP地址等。</p>
-
-      <h4>二、信息使用目的</h4>
-      <p>1. 为您提供在线学习、考试、培训管理等服务。</p>
-      <p>2. 改善和优化我们的产品和服务。</p>
-      <p>3. 进行数据分析和统计，用于企业内部培训管理。</p>
-
-      <h4>三、信息共享与披露</h4>
-      <p>您的学习记录和相关信息可能会与您所属的企业管理员共享，用于培训管理和考核。</p>
-      <p>未经您的明确同意，我们不会将您的个人信息提供给第三方。</p>
-
-      <h4>四、信息安全</h4>
-      <p>我们采取业界通行的安全措施保护您的个人信息，防止未经授权的访问、使用或泄露。</p>
-
-      <h4>五、您的权利</h4>
-      <p>您有权访问、更正、删除您的个人信息。如需行使上述权利，请联系您所属企业的管理员或我们的客服。</p>
-    </div>
-    <div class="modal-footer">
-      <button onclick="closePrivacy()">我同意《隐私政策》内相关内容</button>
     </div>
   </div>
 </div>
 
-<!-- Toast -->
-<div class="toast" id="toast"></div>
+<div class="copyright-area">
+  <div class="copy-line">Copyright &copy; 2026 radnova.com All rights reserved 绚星智慧科技有限公司 版权所有</div>
+  <div class="copy-line">苏ICP备14034064号-6 增值电信业务许可证号：苏B2-20180039 苏州网安备32050502011736号</div>
+</div>
+
+<div class="modal-overlay" id="privacyModal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="hidePrivacy()">&times;</button>
+    <h3>隐私政策</h3>
+    <p>欢迎使用鼎盛E學苑学习平台（以下简称"本平台"）。我们非常重视您的隐私和个人信息保护。</p>
+    <p><strong>一、我们收集的信息</strong><br>
+    1. 注册信息：当您注册账号时，我们需要收集您的手机号码或邮箱地址、姓名、所属企业等基本信息。<br>
+    2. 学习记录：我们会记录您的课程学习进度、考试结果、学习时长等信息。<br>
+    3. 设备信息：我们会收集您使用本平台时的设备型号、操作系统版本、IP地址等。</p>
+    <p><strong>二、信息使用目的</strong><br>
+    1. 为您提供在线学习、考试、培训管理等服务。<br>
+    2. 改善和优化我们的产品和服务。<br>
+    3. 进行数据分析和统计，用于企业内部培训管理。</p>
+    <p><strong>三、信息共享与披露</strong><br>
+    您的学习记录和相关信息可能会与您所属的企业管理员共享，用于培训管理和考核。未经您的明确同意，我们不会将您的个人信息提供给第三方。</p>
+    <p><strong>四、信息安全</strong><br>
+    我们采取业界通行的安全措施保护您的个人信息，防止未经授权的访问、使用或泄露。</p>
+    <p><strong>五、您的权利</strong><br>
+    您有权访问、更正、删除您的个人信息。如需行使上述权利，请联系您所属企业的管理员或我们的客服。</p>
+    <p style="text-align:center;margin-top:20px"><button onclick="hidePrivacy();document.getElementById('privacyCheck').checked=true;checkForm()" style="padding:8px 32px;background:#436bff;color:#fff;border:none;border-radius:4px;font-size:14px;cursor:pointer">我同意《隐私政策》内相关内容</button></p>
+  </div>
+</div>
 
 <script>
-// ===== 国家区号数据 =====
-const countryCodes = [
-  {code:'+86',name:'中国',pinyin:'zhongguo'},
-  {code:'+852',name:'中国香港',pinyin:'xianggang'},
-  {code:'+853',name:'中国澳门',pinyin:'aomen'},
-  {code:'+886',name:'中国台湾',pinyin:'taiwan'},
-  {code:'+1',name:'美国',pinyin:'meiguo'},
-  {code:'+44',name:'英国',pinyin:'yingguo'},
-  {code:'+81',name:'日本',pinyin:'riben'},
-  {code:'+82',name:'韩国',pinyin:'hanguo'},
-  {code:'+65',name:'新加坡',pinyin:'xinjiapo'},
-  {code:'+60',name:'马来西亚',pinyin:'malaixiya'},
-  {code:'+66',name:'泰国',pinyin:'taiguo'},
-  {code:'+84',name:'越南',pinyin:'yuenan'},
-  {code:'+62',name:'印度尼西亚',pinyin:'yindunixiya'},
-  {code:'+63',name:'菲律宾',pinyin:'feilvbin'},
-  {code:'+95',name:'缅甸',pinyin:'miandian'},
-  {code:'+855',name:'柬埔寨',pinyin:'jianpuzhai'},
-  {code:'+856',name:'老挝',pinyin:'laowo'},
-  {code:'+91',name:'印度',pinyin:'yindu'},
-  {code:'+61',name:'澳大利亚',pinyin:'aodaliya'},
-  {code:'+64',name:'新西兰',pinyin:'xinxilan'},
-  {code:'+7',name:'俄罗斯',pinyin:'eluosi'},
-  {code:'+49',name:'德国',pinyin:'deguo'},
-  {code:'+33',name:'法国',pinyin:'faguo'},
-  {code:'+39',name:'意大利',pinyin:'yidali'},
-  {code:'+34',name:'西班牙',pinyin:'xibanya'},
-  {code:'+31',name:'荷兰',pinyin:'helan'},
-  {code:'+46',name:'瑞典',pinyin:'ruidian'},
-  {code:'+47',name:'挪威',pinyin:'nuowei'},
-  {code:'+45',name:'丹麦',pinyin:'danmai'},
-  {code:'+358',name:'芬兰',pinyin:'fenlan'},
-  {code:'+41',name:'瑞士',pinyin:'ruishi'},
-  {code:'+43',name:'奥地利',pinyin:'aodili'},
-  {code:'+48',name:'波兰',pinyin:'bolan'},
-  {code:'+55',name:'巴西',pinyin:'baxi'},
-  {code:'+52',name:'墨西哥',pinyin:'moxige'},
-  {code:'+54',name:'阿根廷',pinyin:'agenting'},
-  {code:'+971',name:'阿联酋',pinyin:'alianqiu'},
-  {code:'+966',name:'沙特阿拉伯',pinyin:'shate'},
-  {code:'+20',name:'埃及',pinyin:'aiji'},
-  {code:'+27',name:'南非',pinyin:'nanfei'},
-  {code:'+234',name:'尼日利亚',pinyin:'niriliya'},
-  {code:'+90',name:'土耳其',pinyin:'tuerqi'},
-  {code:'+351',name:'葡萄牙',pinyin:'putaoya'},
-  {code:'+32',name:'比利时',pinyin:'bilishi'},
-  {code:'+353',name:'爱尔兰',pinyin:'aierlan'},
-  {code:'+372',name:'爱沙尼亚',pinyin:'aishaniya'},
-  {code:'+376',name:'安道尔共和国',pinyin:'andaoer'},
-  {code:'+244',name:'安哥拉',pinyin:'angela'},
-  {code:'+1264',name:'安圭拉岛',pinyin:'anguila'},
-  {code:'+1268',name:'安提瓜和巴布达',pinyin:'antigua'},
-  {code:'+1246',name:'巴巴多斯',pinyin:'babaduosi'},
-  {code:'+675',name:'巴布亚新几内亚',pinyin:'babuya'},
-  {code:'+1242',name:'巴哈马',pinyin:'bahama'},
-  {code:'+92',name:'巴基斯坦',pinyin:'bajisitan'},
-  {code:'+595',name:'巴拉圭',pinyin:'balagui'},
-  {code:'+970',name:'巴勒斯坦',pinyin:'balesitan'},
-  {code:'+973',name:'巴林',pinyin:'balin'},
-  {code:'+507',name:'巴拿马',pinyin:'banama'},
+// Country codes
+var countryCodes = [
+  {code:'+86',name:'中国'},{code:'+853',name:'澳门（中国）'},{code:'+886',name:'台湾（中国）'},{code:'+852',name:'香港（中国）'},
+  {code:'+1',name:'美国'},{code:'+1',name:'加拿大'},{code:'+44',name:'英国'},{code:'+81',name:'日本'},{code:'+82',name:'韩国'},
+  {code:'+65',name:'新加坡'},{code:'+60',name:'马来西亚'},{code:'+66',name:'泰国'},{code:'+63',name:'菲律宾'},
+  {code:'+62',name:'印度尼西亚'},{code:'+84',name:'越南'},{code:'+91',name:'印度'},{code:'+61',name:'澳大利亚'},
+  {code:'+64',name:'新西兰'},{code:'+49',name:'德国'},{code:'+33',name:'法国'},{code:'+39',name:'意大利'},
+  {code:'+34',name:'西班牙'},{code:'+7',name:'俄罗斯'},{code:'+55',name:'巴西'},{code:'+52',name:'墨西哥'},
+  {code:'+971',name:'阿联酋'},{code:'+966',name:'沙特阿拉伯'},{code:'+27',name:'南非'},
 ];
 
-let selectedCountry = countryCodes[0]; // 默认中国
-let smsTimer = null;
-let smsSeconds = 0;
+var smsTab = document.getElementById('formSms');
+var accountTab = document.getElementById('formAccount');
+var tabSms = document.getElementById('tabSms');
+var tabAccount = document.getElementById('tabAccount');
+var switchLink = document.getElementById('switchLink');
+var currentTab = 'sms';
 
-// ===== 初始化区号列表 =====
-function renderAreaList(filter){
-  var list = document.getElementById('areaList');
-  var items = filter ? countryCodes.filter(function(c){
-    var q = filter.toLowerCase();
-    return c.name.toLowerCase().includes(q) || c.code.includes(q) || c.pinyin.toLowerCase().includes(q);
-  }) : countryCodes;
-  var html = '';
-  for(var i=0;i<items.length;i++){
-    var sel = items[i].code===selectedCountry.code?' selected':'';
-    html += '<button type="button" class="area-item'+sel+'" data-code="'+items[i].code+'" onclick="selectCountry(\''+items[i].code+'\')"><span class="code">'+items[i].code+'</span><span class="name">'+items[i].name+'</span></button>';
+function switchTab(tab) {
+  currentTab = tab;
+  if (tab === 'sms') {
+    smsTab.classList.remove('hidden');
+    accountTab.classList.add('hidden');
+    tabSms.classList.add('active');
+    tabAccount.classList.remove('active');
+    switchLink.textContent = '手机短信登录';
+  } else {
+    smsTab.classList.add('hidden');
+    accountTab.classList.remove('hidden');
+    tabSms.classList.remove('active');
+    tabAccount.classList.add('active');
+    switchLink.textContent = '账号密码登录';
   }
-  list.innerHTML = html;
+  checkForm();
 }
-renderAreaList();
 
-// ===== 区号选择器 =====
-function toggleAreaCode(){
-  var wrap = document.getElementById('areaCodeWrap');
-  wrap.classList.toggle('open');
-  if(wrap.classList.contains('open')){
+switchLink.onclick = function() {
+  if (currentTab === 'sms') switchTab('account');
+  else switchTab('sms');
+};
+
+function toggleLang() {
+  document.getElementById('langDropdown').classList.toggle('show');
+}
+function switchLang(lang) {
+  document.getElementById('currentLang').textContent = lang;
+  document.getElementById('langDropdown').classList.remove('show');
+}
+
+function renderAreas(filter) {
+  var list = document.getElementById('areaList');
+  list.innerHTML = '';
+  var items = countryCodes;
+  if (filter) {
+    var f = filter.toLowerCase();
+    items = countryCodes.filter(function(c){return c.name.toLowerCase().indexOf(f)>=0||c.code.indexOf(f)>=0;});
+  }
+  items.forEach(function(c){
+    var div = document.createElement('div');
+    div.className = 'area-item';
+    div.innerHTML = '<span>'+c.name+'</span><span style="color:#999">'+c.code+'</span>';
+    div.onclick = function(){ selectArea(c.code, c.name); };
+    list.appendChild(div);
+  });
+}
+renderAreas();
+
+function selectArea(code, name) {
+  document.getElementById('areaCodeText').textContent = code + ' ' + name;
+  document.getElementById('areaDropdown').classList.remove('show');
+}
+
+function toggleAreaDropdown() {
+  var dd = document.getElementById('areaDropdown');
+  dd.classList.toggle('show');
+  if (dd.classList.contains('show')) {
     document.getElementById('areaSearch').value = '';
-    renderAreaList();
+    renderAreas();
     setTimeout(function(){document.getElementById('areaSearch').focus();},100);
   }
 }
-function selectCountry(code){
-  var found = countryCodes.filter(function(c){return c.code===code;})[0];
-  if(found){
-    selectedCountry = found;
-    document.getElementById('areaCodeLabel').textContent = found.code + ' ' + found.name;
-    renderAreaList();
-  }
-  document.getElementById('areaCodeWrap').classList.remove('open');
-}
-function filterAreas(){
-  var q = document.getElementById('areaSearch').value;
-  renderAreaList(q);
+
+function filterAreas() {
+  renderAreas(document.getElementById('areaSearch').value);
 }
 
-// 点击外部关闭区号选择器
-document.addEventListener('click',function(e){
-  var wrap = document.getElementById('areaCodeWrap');
-  if(wrap.classList.contains('open') && !wrap.contains(e.target)){
-    wrap.classList.remove('open');
+document.addEventListener('click', function(e){
+  var areaCode = document.getElementById('areaCodeBtn');
+  var areaDD = document.getElementById('areaDropdown');
+  if (!areaCode.contains(e.target) && !areaDD.contains(e.target)) {
+    areaDD.classList.remove('show');
+  }
+  var langSel = document.getElementById('langSelector');
+  var langDD = document.getElementById('langDropdown');
+  if (!langSel.contains(e.target) && !langDD.contains(e.target)) {
+    langDD.classList.remove('show');
   }
 });
 
-// ===== 语言选择器 =====
-function toggleLang(){
-  document.getElementById('langSelector').classList.toggle('open');
-}
-document.addEventListener('click',function(e){
-  var sel = document.getElementById('langSelector');
-  if(sel.classList.contains('open') && !sel.contains(e.target)){
-    sel.classList.remove('open');
-  }
-});
-var langItems = document.querySelectorAll('.lang-item');
-langItems.forEach(function(item){
-  item.addEventListener('click',function(){
-    var lang = this.getAttribute('data-lang');
-    document.getElementById('langLabel').textContent = this.textContent;
-    langItems.forEach(function(li){li.classList.remove('active');});
-    this.classList.add('active');
-    document.getElementById('langSelector').classList.remove('open');
-    showToast('语言已切换为: '+this.textContent+' (演示)');
-  });
-});
+var codeTimer = null;
+var codeCountdown = 0;
 
-// ===== Tab 切换 =====
-function switchTab(tab){
-  var tabs = document.querySelectorAll('.tab-btn');
-  var forms = document.querySelectorAll('.login-form');
-  tabs.forEach(function(t){t.classList.remove('active');});
-  forms.forEach(function(f){f.classList.remove('active');});
-  document.querySelector('[data-tab="'+tab+'"]').classList.add('active');
-  document.getElementById('form-'+tab).classList.add('active');
-  // 重置区号选择器状态
-  document.getElementById('areaCodeWrap').classList.remove('open');
-}
-
-// ===== 表单验证 =====
-function checkSmsForm(){
-  var phone = document.getElementById('phone').value.trim();
-  var code = document.getElementById('smsCode').value.trim();
-  var agree = document.getElementById('smsAgree').checked;
-  var btn = document.getElementById('smsLoginBtn');
-  btn.disabled = !(phone && code && agree);
-}
-function checkAccountForm(){
-  var user = document.getElementById('username').value.trim();
-  var pwd = document.getElementById('password').value.trim();
-  var agree = document.getElementById('accountAgree').checked;
-  var btn = document.getElementById('accountLoginBtn');
-  btn.disabled = !(user && pwd && agree);
-}
-
-// ===== 发送验证码 =====
-function sendSms(){
-  if(smsTimer) return;
-  var phone = document.getElementById('phone').value.trim();
-  if(!phone){showToast('请先输入手机号');return;}
-  smsSeconds = 60;
-  var btn = document.getElementById('smsSendBtn');
+function sendCode() {
+  var phone = document.getElementById('phoneInput').value.trim();
+  if (!phone || codeCountdown > 0) return;
+  codeCountdown = 60;
+  var btn = document.getElementById('sendCodeBtn');
   btn.disabled = true;
-  btn.classList.add('counting');
-  btn.textContent = smsSeconds + 's';
-  showToast('验证码已发送 (演示)');
-  smsTimer = setInterval(function(){
-    smsSeconds--;
-    if(smsSeconds <= 0){
-      clearInterval(smsTimer);
-      smsTimer = null;
+  btn.textContent = codeCountdown + 's';
+  codeTimer = setInterval(function(){
+    codeCountdown--;
+    btn.textContent = codeCountdown + 's';
+    if (codeCountdown <= 0) {
+      clearInterval(codeTimer);
       btn.disabled = false;
-      btn.classList.remove('counting');
       btn.textContent = '发送验证码';
-    }else{
-      btn.textContent = smsSeconds + 's';
     }
-  },1000);
+  }, 1000);
 }
 
-// ===== 登录 =====
-function doLogin(type){
-  var btnId = type==='sms'?'smsLoginBtn':'accountLoginBtn';
-  var btn = document.getElementById(btnId);
-  if(btn.disabled) return;
-  btn.disabled = true;
-  btn.classList.add('loading');
-  setTimeout(function(){
-    btn.disabled = false;
-    btn.classList.remove('loading');
-    // 恢复表单验证状态
-    if(type==='sms') checkSmsForm(); else checkAccountForm();
-    showToast('登录功能仅做演示');
-  },1000);
-}
-
-// ===== 隐私政策弹窗 =====
-function openPrivacy(){
-  document.getElementById('privacyModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closePrivacy(){
-  document.getElementById('privacyModal').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-// ===== Toast =====
-var toastTimer = null;
-function showToast(msg){
-  var el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  if(toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(function(){
-    el.classList.remove('show');
-  },2000);
-}
-
-// ===== 键盘 Enter 登录 =====
-document.addEventListener('keydown',function(e){
-  if(e.key==='Enter'){
-    var activeForm = document.querySelector('.login-form.active');
-    if(!activeForm) return;
-    if(document.getElementById('privacyModal').classList.contains('open')) return;
-    var activeTab = activeForm.id==='form-sms'?'sms':'account';
-    doLogin(activeTab);
+function checkForm() {
+  var btn = document.getElementById('loginBtn');
+  var checked = document.getElementById('privacyCheck').checked;
+  var valid = false;
+  if (currentTab === 'sms') {
+    var phone = document.getElementById('phoneInput').value.trim();
+    var code = document.getElementById('smsCode').value.trim();
+    valid = phone && code && checked;
+  } else {
+    var acc = document.getElementById('accountInput').value.trim();
+    var pwd = document.getElementById('pwdInput').value.trim();
+    valid = acc && pwd && checked;
   }
+  if (valid) {
+    btn.classList.add('active');
+    btn.disabled = false;
+  } else {
+    btn.classList.remove('active');
+    btn.disabled = true;
+  }
+}
+
+function doLogin() {
+  var btn = document.getElementById('loginBtn');
+  if (!btn.classList.contains('active') || btn.classList.contains('loading')) return;
+  btn.classList.add('loading');
+  btn.disabled = true;
+  setTimeout(function(){
+    btn.classList.remove('loading');
+    btn.classList.remove('active');
+    btn.disabled = true;
+    document.getElementById('privacyCheck').checked = false;
+    alert('登录功能仅做演示');
+  }, 800);
+}
+
+function showPrivacy() {
+  document.getElementById('privacyModal').classList.add('show');
+}
+function hidePrivacy() {
+  document.getElementById('privacyModal').classList.remove('show');
+}
+
+// Enter key support
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Enter') doLogin();
 });
 </script>
-
 </body>
 </html>
